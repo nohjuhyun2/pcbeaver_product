@@ -221,36 +221,46 @@ tr:last-child td{border-bottom:none}
     <div class="ttl">해결할 문제</div>
     <p class="sub" style="margin-bottom:14px">PCB 설계 자동화는 왜 아직도 해결되지 않았는가 — 구조적 공백이 남아 있다</p>
 
-    <!-- Row 1: EDA 한계 + 두 선택지 -->
-    <div class="g2" style="margin-bottom:11px">
-      <div class="card cr">
-        <h3>기존 EDA 툴의 한계</h3>
-        <p style="margin-bottom:8px">PCB 설계는 <strong>물리 특성 · 고객사별 디자인룰 · 산업 규격</strong>을 동시에 만족해야 하는 고난도 작업이어서 자동화가 어려웠다.</p>
-        <ul class="ul" style="font-size:.82rem">
-          <li>범용 설계 환경 구조상 <strong>고객사별 룰과 양산 제약을 개별 반영하기 어려움</strong></li>
-          <li>레거시 아키텍처 위에서 <strong>AI 기반 자동 완성 기능 구현·확장에 제약</strong></li>
-          <li>생산성 향상엔 기여하지만, 자동 완성 수준의 완전한 자동화엔 미도달</li>
-        </ul>
-      </div>
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="card" style="background:rgba(240,64,96,.06);border-color:rgba(240,64,96,.22)">
-          <h3>선택지 A — 직접 설계</h3>
-          <ul class="ul" style="font-size:.82rem">
-            <li>숙련 PCB 엔지니어 양성에 <strong>수년</strong> 소요 — 공급 자체가 제한적</li>
-            <li>인력을 늘려도 <strong>설계 케파 확보가 구조적으로 어려움</strong></li>
-            <li>ECO 발생 시 평균 <strong style="color:var(--rose)">+10주</strong> 추가 지연 반복</li>
-          </ul>
-        </div>
-        <div class="card" style="background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.22)">
-          <h3>선택지 B — 외주 설계</h3>
-          <ul class="ul" style="font-size:.82rem">
-            <li>높은 비용 + 재검증 부담 — 인하우스 케파 부족 시 <strong>대체 수단 없음</strong></li>
-            <li>설계 히스토리를 아는 업체 교체 시 <strong>러닝커브·재검증 비용 재발생</strong></li>
-            <li><strong>특정 업체 의존 고착</strong> — 협상력 저하, 납기 통제 불가</li>
-          </ul>
-        </div>
-      </div>
-    </div>
+    <!-- 직접설계 vs 외주설계 비교 다이어그램 -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 205" style="width:100%;flex-shrink:0;margin-bottom:11px">
+      <defs>
+        <linearGradient id="pga" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1d6fe8" stop-opacity=".18"/><stop offset="100%" stop-color="#1d6fe8" stop-opacity=".03"/></linearGradient>
+        <linearGradient id="pgb" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f5a623" stop-opacity=".18"/><stop offset="100%" stop-color="#f5a623" stop-opacity=".03"/></linearGradient>
+        <linearGradient id="pgc" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#f04060" stop-opacity=".2"/><stop offset="100%" stop-color="#f04060" stop-opacity=".05"/></linearGradient>
+        <marker id="pa" markerWidth="7" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="rgba(122,143,174,.6)"/></marker>
+      </defs>
+      <rect x="2" y="2" width="504" height="136" rx="11" fill="url(#pga)" stroke="rgba(29,111,232,.38)" stroke-width="1.5"/>
+      <rect x="2" y="2" width="504" height="30" rx="11" fill="rgba(29,111,232,.22)"/>
+      <rect x="2" y="22" width="504" height="10" fill="rgba(29,111,232,.22)"/>
+      <text x="254" y="21" text-anchor="middle" fill="#7ab5ff" font-family="Inter,sans-serif" font-size="11.5" font-weight="800" letter-spacing="2">직접 설계 (In-house)</text>
+      <text x="18" y="54" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="34" y="54" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">숙련 엔지니어 양성에 <tspan fill="#ff6b85" font-weight="700">수년</tspan> — 공급 자체 제한적</text>
+      <text x="18" y="76" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="34" y="76" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">인력 증원해도 <tspan fill="#ff6b85" font-weight="700">설계 케파 구조적으로 확보 불가</tspan></text>
+      <text x="18" y="98" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="34" y="98" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">ECO 발생 → 처음부터 재라우팅 → <tspan fill="#ff6b85" font-weight="700">평균 +10주 추가 지연</tspan></text>
+      <text x="18" y="120" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="34" y="120" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">DRC 오류 발견 → <tspan fill="#ff6b85" font-weight="700">검토–재설계 무한 루프</tspan></text>
+      <rect x="594" y="2" width="504" height="136" rx="11" fill="url(#pgb)" stroke="rgba(245,166,35,.38)" stroke-width="1.5"/>
+      <rect x="594" y="2" width="504" height="30" rx="11" fill="rgba(245,166,35,.22)"/>
+      <rect x="594" y="22" width="504" height="10" fill="rgba(245,166,35,.22)"/>
+      <text x="846" y="21" text-anchor="middle" fill="#ffc85a" font-family="Inter,sans-serif" font-size="11.5" font-weight="800" letter-spacing="2">외주 설계 (Design House)</text>
+      <text x="612" y="54" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="628" y="54" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">높은 단가 + CAPA 초과 시 <tspan fill="#ff6b85" font-weight="700">무기한 대기 — 대체 수단 없음</tspan></text>
+      <text x="612" y="76" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="628" y="76" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">설계 히스토리 누적 → <tspan fill="#ff6b85" font-weight="700">특정 업체 고착·협상력 저하</tspan></text>
+      <text x="612" y="98" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="628" y="98" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">업체 교체 시 <tspan fill="#ff6b85" font-weight="700">러닝커브 + 재검증 비용</tspan> 그대로 재발생</text>
+      <text x="612" y="120" fill="#f04060" font-family="Inter,sans-serif" font-size="12" font-weight="700">✕</text>
+      <text x="628" y="120" fill="rgba(240,244,255,.84)" font-family="Inter,sans-serif" font-size="11.5">ECO 재의뢰 후 <tspan fill="#ff6b85" font-weight="700">처음부터 다시 대기·재검증</tspan></text>
+      <circle cx="550" cy="69" r="32" fill="rgba(6,12,28,.96)" stroke="rgba(255,255,255,.09)" stroke-width="1.5"/>
+      <text x="550" y="75" text-anchor="middle" fill="rgba(255,255,255,.35)" font-family="Inter,sans-serif" font-size="14" font-weight="900" letter-spacing="2">VS</text>
+      <polyline points="254,138 254,158 548,158" stroke="rgba(122,143,174,.55)" stroke-width="1.5" fill="none" marker-end="url(#pa)"/>
+      <polyline points="846,138 846,158 552,158" stroke="rgba(122,143,174,.55)" stroke-width="1.5" fill="none"/>
+      <rect x="90" y="164" width="920" height="38" rx="9" fill="url(#pgc)" stroke="rgba(240,64,96,.4)" stroke-width="1.5"/>
+      <text x="550" y="179" text-anchor="middle" fill="#f04060" font-family="Inter,sans-serif" font-size="9.5" font-weight="800" letter-spacing="2.5">공통 결과</text>
+      <text x="550" y="197" text-anchor="middle" fill="rgba(240,244,255,.85)" font-family="Inter,sans-serif" font-size="12">시간 · 비용 · 품질 — 어느 하나도 동시에 개선되지 않는 <tspan fill="#ff6b85" font-weight="700">구조적 함정</tspan></text>
+    </svg>
 
     <!-- Row 2: 결과 + 시장 공백 -->
     <div class="g2">
