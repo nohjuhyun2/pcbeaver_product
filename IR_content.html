@@ -1,653 +1,741 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PCBeaver IR — 피치덱 콘텐츠 가이드</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PCBeaver IR Deck · 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-    :root {
-      --bg: #0d0f14;
-      --surface: #161a23;
-      --surface2: #1e2330;
-      --border: #2a2f3d;
-      --accent: #4f8ef7;
-      --accent2: #00c896;
-      --warn: #ff6b35;
-      --text: #e8eaf0;
-      --text-muted: #7a8099;
-      --tip-bg: #1a2535;
-      --tip-border: #3a5a8a;
-    }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --slide-w: 1280px;
+    --slide-h: 720px;
+    --navy:  #0a1628;
+    --navy2: #0f2040;
+    --blue:  #1d6fe8;
+    --mint:  #00c896;
+    --amber: #f5a623;
+    --rose:  #f04060;
+    --purple:#8b5cf6;
+    --text:  #f0f4ff;
+    --muted: #8898b8;
+    --line:  rgba(255,255,255,0.08);
+  }
 
-    body {
-      font-family: 'Noto Sans KR', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.8;
-      padding: 0;
-    }
+  html, body { width:100%; height:100%; overflow:hidden; background:#060d1a; font-family:'Inter',sans-serif; }
 
-    /* ── 헤더 ── */
-    header {
-      background: linear-gradient(135deg, #0a1628 0%, #111827 50%, #0d1f3c 100%);
-      border-bottom: 1px solid var(--border);
-      padding: 60px 40px 48px;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-    header::before {
-      content: '';
-      position: absolute;
-      top: -80px; left: 50%;
-      transform: translateX(-50%);
-      width: 600px; height: 300px;
-      background: radial-gradient(ellipse, rgba(79,142,247,0.15) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    .logo-tag {
-      display: inline-block;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      padding: 4px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-    }
-    header h1 {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 900;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
-    header h1 span { color: var(--accent); }
-    header p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto;
-    }
+  /* ── 슬라이드 컨테이너 ── */
+  #deck {
+    position: fixed; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
 
-    /* ── 네비게이션 ── */
-    nav {
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      padding: 0 40px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      gap: 0;
-      overflow-x: auto;
-    }
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 500;
-      padding: 14px 16px;
-      white-space: nowrap;
-      border-bottom: 2px solid transparent;
-      transition: all 0.2s;
-    }
-    nav a:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
+  .slide {
+    position: absolute;
+    width: var(--slide-w);
+    height: var(--slide-h);
+    overflow: hidden;
+    border-radius: 20px;
+    display: none;
+    flex-direction: column;
+    color: var(--text);
+    transform-origin: center center;
+  }
+  .slide.active { display: flex; }
 
-    /* ── 메인 레이아웃 ── */
-    main {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-    }
+  /* ── HUD ── */
+  #hud {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 20px; z-index: 100;
+    background: rgba(10,22,40,0.82); backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 10px 20px; border-radius: 999px;
+  }
+  #hud button {
+    width: 36px; height: 36px; border-radius: 50%; border: none; cursor: pointer;
+    background: rgba(255,255,255,0.1); color: #fff; font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.2s;
+  }
+  #hud button:hover { background: var(--blue); }
+  #slide-counter { font-size: 0.82rem; font-weight: 600; color: var(--muted); min-width: 48px; text-align: center; }
+  .dot-row { display: flex; gap: 6px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: all 0.2s; }
+  .dot.on { background: var(--blue); width: 18px; border-radius: 3px; }
 
-    /* ── 섹션 카드 ── */
-    .section {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      margin-bottom: 32px;
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
-    .section:hover { border-color: var(--accent); }
+  /* ── 슬라이드 레이아웃 공통 ── */
+  .s-header {
+    padding: 38px 56px 0;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .s-tag {
+    font-size: 0.68rem; font-weight: 800; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--muted);
+    border: 1px solid rgba(255,255,255,0.14); padding: 5px 12px; border-radius: 999px;
+  }
+  .s-num {
+    font-size: 0.68rem; font-weight: 900; letter-spacing: 0.12em; color: var(--blue);
+  }
+  .s-body { flex: 1; padding: 28px 56px 48px; display: flex; flex-direction: column; justify-content: center; }
+  .s-title {
+    font-size: 3.2rem; font-weight: 900; line-height: 1.02; letter-spacing: -0.04em;
+    margin-bottom: 6px;
+  }
+  .s-sub { font-size: 1.05rem; color: var(--muted); font-weight: 400; margin-bottom: 32px; line-height: 1.6; max-width: 720px; }
 
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 24px 28px;
-      border-bottom: 1px solid var(--border);
-      background: var(--surface2);
-    }
-    .section-num {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.78rem;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-    .n1 { background: rgba(79,142,247,0.15); color: #4f8ef7; border: 1px solid rgba(79,142,247,0.3); }
-    .n2 { background: rgba(255,107,53,0.15); color: #ff6b35; border: 1px solid rgba(255,107,53,0.3); }
-    .n3 { background: rgba(0,200,150,0.15); color: #00c896; border: 1px solid rgba(0,200,150,0.3); }
-    .n4 { background: rgba(168,85,247,0.15); color: #a855f7; border: 1px solid rgba(168,85,247,0.3); }
-    .n5 { background: rgba(250,204,21,0.15); color: #facc15; border: 1px solid rgba(250,204,21,0.3); }
-    .n6 { background: rgba(236,72,153,0.15); color: #ec4899; border: 1px solid rgba(236,72,153,0.3); }
-    .n7 { background: rgba(20,184,166,0.15); color: #14b8a6; border: 1px solid rgba(20,184,166,0.3); }
-    .n8 { background: rgba(249,115,22,0.15); color: #f97316; border: 1px solid rgba(249,115,22,0.3); }
+  /* ── 카드 그리드 ── */
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .grid5 { display: grid; grid-template-columns: repeat(5,1fr); gap: 12px; }
 
-    .section-title-wrap {}
-    .section-en {
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    .section-ko {
-      font-size: 1.1rem;
-      font-weight: 700;
-      color: var(--text);
-    }
+  .card {
+    background: rgba(255,255,255,0.05); border: 1px solid var(--line);
+    border-radius: 16px; padding: 20px 22px;
+  }
+  .card h3 { font-size: 0.88rem; font-weight: 700; color: var(--muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.08em; }
+  .card p  { font-size: 0.92rem; line-height: 1.65; color: rgba(240,244,255,0.8); }
 
-    .section-body { padding: 28px; }
+  .stat { font-size: 2.8rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+  .stat-label { font-size: 0.82rem; color: var(--muted); margin-top: 8px; line-height: 1.5; }
 
-    p { margin-bottom: 16px; font-size: 0.95rem; color: #c8ccd8; }
-    p:last-child { margin-bottom: 0; }
+  /* 색상 변형 */
+  .c-blue   { color: var(--blue); }
+  .c-mint   { color: var(--mint); }
+  .c-amber  { color: var(--amber); }
+  .c-rose   { color: var(--rose); }
+  .c-purple { color: var(--purple); }
 
-    strong { color: var(--text); font-weight: 700; }
+  .border-blue   { border-color: rgba(29,111,232,0.35) !important; }
+  .border-mint   { border-color: rgba(0,200,150,0.35) !important; }
+  .border-amber  { border-color: rgba(245,166,35,0.35) !important; }
+  .border-rose   { border-color: rgba(240,64,96,0.35) !important; }
+  .border-purple { border-color: rgba(139,92,246,0.35) !important; }
 
-    /* ── 팁 박스 ── */
-    .tip {
-      background: var(--tip-bg);
-      border: 1px solid var(--tip-border);
-      border-left: 3px solid var(--accent);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-top: 16px;
-      font-size: 0.85rem;
-      color: #8cb4f0;
-      line-height: 1.6;
-    }
-    .tip + .tip { margin-top: 10px; }
-    .tip-icon { margin-right: 6px; }
+  .bg-blue   { background: rgba(29,111,232,0.1) !important; }
+  .bg-mint   { background: rgba(0,200,150,0.1) !important; }
+  .bg-amber  { background: rgba(245,166,35,0.1) !important; }
+  .bg-rose   { background: rgba(240,64,96,0.1) !important; }
 
-    /* ── 표 ── */
-    .table-wrap {
-      overflow-x: auto;
-      margin: 20px 0;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 0.88rem;
-    }
-    thead tr {
-      background: var(--surface2);
-    }
-    th {
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 700;
-      color: var(--text-muted);
-      font-size: 0.78rem;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border);
-    }
-    td {
-      padding: 12px 16px;
-      border-bottom: 1px solid var(--border);
-      color: #c8ccd8;
-      vertical-align: top;
-    }
-    tr:last-child td { border-bottom: none; }
-    tbody tr:hover td { background: rgba(79,142,247,0.04); }
-    td:first-child { font-weight: 600; color: var(--text); }
-    .badge {
-      display: inline-block;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-    .b1 { background: rgba(79,142,247,0.15); color: #4f8ef7; }
-    .b2 { background: rgba(236,72,153,0.15); color: #ec4899; }
-    .b3 { background: rgba(0,200,150,0.15); color: #00c896; }
-    .b4 { background: rgba(168,85,247,0.15); color: #a855f7; }
-    .b5 { background: rgba(250,204,21,0.15); color: #facc15; }
-    .b6 { background: rgba(249,115,22,0.15); color: #f97316; }
+  /* 구분선 */
+  hr.dim { border: none; border-top: 1px solid var(--line); margin: 18px 0; }
 
-    /* ── 코드/공식 블록 ── */
-    .formula {
-      background: #0a0e18;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 20px 24px;
-      font-family: 'Courier New', monospace;
-      font-size: 1rem;
-      color: var(--accent2);
-      margin: 20px 0;
-      text-align: center;
-      letter-spacing: 0.03em;
-    }
+  /* 배지 */
+  .badge {
+    display: inline-block; padding: 4px 12px; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase;
+  }
 
-    /* ── KPI 스탯 카드 ── */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-      margin: 20px 0;
-    }
-    .kpi-card {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-    }
-    .kpi-val {
-      font-size: 1.5rem;
-      font-weight: 900;
-      color: var(--accent);
-      line-height: 1.2;
-    }
-    .kpi-val.green { color: var(--accent2); }
-    .kpi-val.orange { color: var(--warn); }
-    .kpi-val.purple { color: #a855f7; }
-    .kpi-label {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 4px;
-    }
+  /* 리스트 */
+  .ulist { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .ulist li { display: flex; gap: 10px; font-size: 0.92rem; line-height: 1.6; color: rgba(240,244,255,0.82); }
+  .ulist li::before { content: '—'; color: var(--muted); flex-shrink: 0; }
 
-    /* ── GTM 스텝 ── */
-    .steps {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin: 20px 0;
-    }
-    .step {
-      display: flex;
-      align-items: flex-start;
-      gap: 16px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px 20px;
-    }
-    .step-num {
-      width: 32px; height: 32px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-    .step-body {}
-    .step-target { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2px; }
-    .step-action { font-size: 0.92rem; font-weight: 600; color: var(--text); }
+  /* 공정 스텝 */
+  .flow { display: flex; align-items: stretch; gap: 0; }
+  .flow-step {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--line);
+    padding: 20px; position: relative;
+  }
+  .flow-step:first-child { border-radius: 14px 0 0 14px; }
+  .flow-step:last-child  { border-radius: 0 14px 14px 0; }
+  .flow-arrow {
+    display: flex; align-items: center; padding: 0 2px;
+    color: var(--muted); font-size: 1.1rem;
+  }
+  .flow-step .step-tag { font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .flow-step .step-title { font-size: 0.96rem; font-weight: 700; margin-bottom: 6px; }
+  .flow-step .step-desc { font-size: 0.82rem; color: rgba(240,244,255,0.65); line-height: 1.55; }
 
-    /* ── 경쟁 비교 ── */
-    .compare-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin: 20px 0;
-    }
-    .compare-card {
-      border-radius: 10px;
-      padding: 16px 18px;
-    }
-    .compare-card.bad {
-      background: rgba(255,107,53,0.07);
-      border: 1px solid rgba(255,107,53,0.2);
-    }
-    .compare-card.good {
-      background: rgba(0,200,150,0.07);
-      border: 1px solid rgba(0,200,150,0.2);
-    }
-    .compare-label {
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .compare-card.bad .compare-label { color: var(--warn); }
-    .compare-card.good .compare-label { color: var(--accent2); }
-    .compare-list { list-style: none; }
-    .compare-list li {
-      font-size: 0.85rem;
-      color: #c8ccd8;
-      padding: 4px 0;
-      display: flex;
-      gap: 8px;
-    }
-    .compare-list li::before { flex-shrink: 0; }
-    .compare-card.bad .compare-list li::before { content: '✕'; color: var(--warn); }
-    .compare-card.good .compare-list li::before { content: '✓'; color: var(--accent2); }
+  /* 로드맵 */
+  .roadmap { display: flex; flex-direction: column; gap: 10px; }
+  .rm-step {
+    display: grid; grid-template-columns: 80px 180px 1fr;
+    align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.04); border: 1px solid var(--line);
+    border-radius: 12px; padding: 14px 20px;
+  }
+  .rm-badge { font-size: 0.7rem; font-weight: 900; letter-spacing: 0.1em; color: var(--blue); }
+  .rm-who   { font-size: 0.88rem; font-weight: 700; }
+  .rm-what  { font-size: 0.86rem; color: rgba(240,244,255,0.72); line-height: 1.55; }
 
-    /* ── 푸터 ── */
-    footer {
-      text-align: center;
-      padding: 32px;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      border-top: 1px solid var(--border);
-    }
+  /* 공식 박스 */
+  .formula-box {
+    background: rgba(29,111,232,0.12); border: 1px solid rgba(29,111,232,0.3);
+    border-radius: 14px; padding: 20px 28px; text-align: center;
+    font-size: 1rem; font-weight: 600; color: rgba(240,244,255,0.9); line-height: 1.8;
+  }
+  .formula-result { font-size: 1.8rem; font-weight: 900; color: var(--mint); letter-spacing: -0.03em; }
 
-    @media (max-width: 600px) {
-      header { padding: 40px 20px 32px; }
-      nav { padding: 0 16px; }
-      main { padding: 32px 16px 60px; }
-      .section-header { padding: 18px 20px; }
-      .section-body { padding: 20px; }
-      .compare-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+  /* vs 비교 */
+  .vs-col { display: flex; flex-direction: column; gap: 8px; }
+  .vs-item {
+    display: flex; gap: 10px; align-items: flex-start;
+    font-size: 0.88rem; line-height: 1.6; color: rgba(240,244,255,0.82);
+  }
+  .vs-item .icon { flex-shrink: 0; font-size: 0.8rem; margin-top: 3px; }
+
+  /* ─── 슬라이드별 배경 ─── */
+
+  /* 00 Cover */
+  #s0 {
+    background: linear-gradient(140deg, #050d1e 0%, #091428 50%, #0a1a38 100%);
+  }
+  #s0::before {
+    content:''; position:absolute; inset:0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(29,111,232,0.22), transparent),
+      radial-gradient(ellipse 40% 40% at 10% 80%, rgba(0,200,150,0.12), transparent);
+    pointer-events:none;
+  }
+  #s0 .grid-bg {
+    position:absolute; inset:0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    mask-image: radial-gradient(ellipse at center, rgba(0,0,0,0.5), transparent 75%);
+  }
+  #s0 .cover-body {
+    position:relative; z-index:1;
+    padding: 0 80px;
+    display:flex; flex-direction:column; justify-content:center; height:100%;
+    gap: 20px;
+  }
+  #s0 .cover-label {
+    font-size:0.72rem; font-weight:800; letter-spacing:0.2em; text-transform:uppercase;
+    color: var(--blue); display:flex; align-items:center; gap:8px;
+  }
+  #s0 .cover-label::before { content:''; width:28px; height:1px; background:var(--blue); }
+  #s0 h1 {
+    font-size: 5rem; font-weight: 900; line-height: 0.92; letter-spacing: -0.05em;
+    max-width: 780px;
+  }
+  #s0 h1 em { color: var(--blue); font-style: normal; }
+  #s0 .cover-desc {
+    font-size: 1.1rem; color: var(--muted); max-width: 520px; line-height: 1.7; font-weight: 400;
+  }
+  #s0 .cover-stats {
+    display:flex; gap: 40px; margin-top: 10px;
+  }
+  #s0 .cover-stat strong { display:block; font-size:2rem; font-weight:900; letter-spacing:-0.04em; }
+  #s0 .cover-stat span   { font-size:0.8rem; color:var(--muted); }
+  #s0 .cover-right {
+    position:absolute; right:80px; top:50%; transform:translateY(-50%);
+    display:flex; flex-direction:column; gap:12px; width:300px;
+  }
+  #s0 .mini-pill {
+    padding:14px 18px; border:1px solid var(--line); border-radius:14px;
+    background:rgba(255,255,255,0.04); font-size:0.86rem; line-height:1.55;
+  }
+  #s0 .mini-pill strong { display:block; font-size:0.72rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:4px; }
+
+  /* 01~08 공통 배경 */
+  .slide-inner {
+    background: linear-gradient(160deg, #080f1e 0%, #0b1526 60%, #091220 100%);
+    width:100%; height:100%; display:flex; flex-direction:column;
+    position:relative;
+  }
+  .slide-inner::before {
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.4), transparent 60%);
+  }
+  .slide-inner::after {
+    content:''; position:absolute; right:-80px; top:-80px;
+    width:400px; height:400px; border-radius:50%; pointer-events:none;
+    background: radial-gradient(circle, rgba(29,111,232,0.08), transparent 70%);
+  }
+
+  /* accent 라인 (상단) */
+  .accent-line {
+    position:absolute; top:0; left:56px; right:56px; height:2px;
+    background: linear-gradient(90deg, var(--blue), transparent);
+    border-radius:0 0 4px 4px;
+  }
+
+  /* ── 피치덱 힌트 칩 ── */
+  .pitch-hint {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:7px 14px; border-radius:999px;
+    background:rgba(29,111,232,0.1); border:1px solid rgba(29,111,232,0.25);
+    font-size:0.75rem; font-weight:700; color:rgba(29,111,232,0.9);
+    margin-top:auto; align-self:flex-start;
+  }
+  .pitch-hint::before { content:'💡'; font-size:0.7rem; }
+
+  /* ── 테이블 ── */
+  table { width:100%; border-collapse:collapse; }
+  th { font-size:0.7rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); padding:10px 14px; border-bottom:1px solid var(--line); text-align:left; }
+  td { font-size:0.88rem; padding:10px 14px; border-bottom:1px solid var(--line); color:rgba(240,244,255,0.82); line-height:1.55; }
+  tr:last-child td { border-bottom:none; }
+  .t-wrap { border:1px solid var(--line); border-radius:14px; overflow:hidden; background:rgba(255,255,255,0.03); }
+
+  /* ── 반응형 스케일 ── */
+  #scale-wrap { position:fixed; inset:0; display:flex; align-items:center; justify-content:center; }
+
+</style>
 </head>
 <body>
 
-<!-- ── 헤더 ── -->
-<header>
-  <div class="logo-tag">Investor Relations</div>
-  <h1><span>PCBeaver</span> IR 콘텐츠</h1>
-  <p>피치덱 작성을 위한 8개 핵심 섹션 가이드 · 2026</p>
-</header>
+<div id="scale-wrap">
+<div id="deck">
 
-<!-- ── 네비게이션 ── -->
-<nav>
-  <a href="#s1">① 목표 고객</a>
-  <a href="#s2">② 문제</a>
-  <a href="#s3">③ 솔루션</a>
-  <a href="#s4">④ 차별화</a>
-  <a href="#s5">⑤ 경쟁 분석</a>
-  <a href="#s6">⑥ 고객 획득</a>
-  <a href="#s7">⑦ 수익화</a>
-  <a href="#s8">⑧ KPI</a>
-</nav>
-
-<!-- ── 메인 ── -->
-<main>
-
-  <!-- 1. 목표 고객 -->
-  <div class="section" id="s1">
-    <div class="section-header">
-      <div class="section-num n1">01</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Target Customer</div>
-        <div class="section-ko">목표 고객</div>
+  <!-- ══ SLIDE 00: COVER ══ -->
+  <div class="slide" id="s0">
+    <div class="grid-bg"></div>
+    <div class="cover-body">
+      <div class="cover-label">2026 · IR Pitch Deck · PCBeaver</div>
+      <h1>PCB 설계를<br/><em>딸깍 한 번</em>으로.</h1>
+      <p class="cover-desc">인하우스 설계팀과 디자인 하우스의 반복 재작업·외주 병목을 AI 자동 설계로 대체합니다.</p>
+      <div class="cover-stats">
+        <div class="cover-stat"><strong class="c-blue">90%+</strong><span>설계 시간 단축</span></div>
+        <div class="cover-stat"><strong class="c-mint">60%+</strong><span>외주 비용 절감</span></div>
+        <div class="cover-stat"><strong class="c-amber">400억</strong><span>연간 목표 매출</span></div>
       </div>
     </div>
-    <div class="section-body">
-      <p>우리의 핵심 타깃은 자체적으로 제품을 개발하는 전장품 설계 기업의 <strong>인하우스(In-house) 하드웨어 설계 엔지니어</strong>와 고객사의 외주 물량을 소화하는 <strong>전문 PCB 디자인 하우스(Design House)</strong>입니다.</p>
-      <p>이들은 타임 투 마켓(Time-to-Market)을 엄격히 준수하면서도 전기적·물리적 설계 제약 조건(Constraints)을 100% 충족하여 단 한 번의 설계로 <strong>무결점(Zero-Defect)</strong> 결과물을 얻어내야 하는 막중한 과업을 지고 있습니다. 특히 잦은 설계 변경과 외주 일정 지연으로 인해 극심한 업무 스트레스와 야근에 시달리고 있으며, 결점 없는 고품질 설계로 프로젝트 팀과 고객사의 신뢰를 확보하는 것을 가장 중요한 정서적·사회적 목표로 삼고 있습니다.</p>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Who We Serve" 슬라이드에서 목표 고객의 페르소나와 그들이 겪는 실무적/심리적 압박을 공감대 있게 제시할 때 활용하세요.</div>
+    <div class="cover-right">
+      <div class="mini-pill"><strong>Target</strong>전장품 설계 기업 인하우스 엔지니어 · PCB 디자인 하우스</div>
+      <div class="mini-pill"><strong>Moat</strong>양산 사양 맞춤형 내부 데이터셋 + 전장 도메인 지식</div>
+      <div class="mini-pill"><strong>GTM</strong>무료 PoC → 예산 확보 → 데이터 락인 3단계 침투</div>
+      <div class="mini-pill"><strong>Model</strong>온디맨드 건당 과금 + 연간 구독 투트랙</div>
     </div>
   </div>
 
-  <!-- 2. 문제 -->
-  <div class="section" id="s2">
-    <div class="section-header">
-      <div class="section-num n2">02</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Problem</div>
-        <div class="section-ko">해결할 문제</div>
+  <!-- ══ SLIDE 01: TARGET CUSTOMER ══ -->
+  <div class="slide" id="s1">
+    <div class="slide-inner">
+      <div class="accent-line"></div>
+      <div class="s-header">
+        <span class="s-num">01 / 08</span>
+        <span class="s-tag">Target Customer</span>
       </div>
-    </div>
-    <div class="section-body">
-      <p>현장의 엔지니어들은 기구 외곽선 변경이나 OEM 고객사의 요구사항이 중간에 수정될 때마다 사실상 처음부터 다시 라우팅을 설계해야 하는 <strong>치명적인 비효율(ECO)</strong>을 겪고 있습니다.</p>
-      <p>이로 인해 엔지니어의 핵심 업무 시간이 단순 반복적인 수작업 노가다에 소모되는 막대한 리소스 낭비가 발생하며, 설계 완료 후에도 체크리스트 점검이나 디자인 리뷰 과정에서 오류가 발견되면 끝없는 재설계 늪에 빠집니다. 대안으로 전문 디자인 하우스에 설계를 의뢰하기도 하지만, <strong>CAPA가 부족할 경우 무기한 대기</strong>해야 하는 심각한 병목 현상과 양산 지연 리스크에 직면하게 됩니다.</p>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Problem" 슬라이드에서 잦은 기구 변경으로 무한 루프에 빠진 엔지니어의 고충을 스토리텔링하여 문제의 심각성을 부각할 때 활용하세요.</div>
-    </div>
-  </div>
-
-  <!-- 3. 솔루션 -->
-  <div class="section" id="s3">
-    <div class="section-header">
-      <div class="section-num n3">03</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Solution & Value Proposition</div>
-        <div class="section-ko">솔루션 및 핵심가치제안</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <p style="font-size:1.05rem; font-weight:700; color:#fff; border-left:3px solid var(--accent2); padding-left:14px; margin-bottom:20px;">"단 한 번의 '딸깍'으로 검증과 재작업이 필요 없는 완성형 PCB를 가장 빠르고 저렴하게"</p>
-      <p>고객이 새로운 툴을 학습해야 하는 심리적 장벽을 없애기 위해, 기존 외주 서비스와 완벽히 동일하게 <strong>회로도(Netlist)와 기구 외곽선(DXF)만 전달</strong>하면 완성된 산출물을 납품하는 프로세스를 구축했습니다.</p>
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-val green">90%+</div>
-          <div class="kpi-label">시간 단축</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val orange">60%+</div>
-          <div class="kpi-label">비용 절감</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val">Zero</div>
-          <div class="kpi-label">도입 장벽</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-val purple">1-Pass</div>
-          <div class="kpi-label">재작업 없는 설계</div>
-        </div>
-      </div>
-      <p>궁극적으로 기업의 HKMC 등 고객사향 연구개발비를 60% 축소하고 설계 오류에 따른 불량을 예방하여, 시장 경쟁력과 엔지니어의 삶의 질을 동시에 끌어올립니다.</p>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Solution" 슬라이드에서 '기존 프로세스 유지(도입 장벽 Zero)'와 '압도적인 시간/비용 단축 수치'를 대비하여 직관적으로 보여줄 때 활용하세요.</div>
-    </div>
-  </div>
-
-  <!-- 4. 차별화 -->
-  <div class="section" id="s4">
-    <div class="section-header">
-      <div class="section-num n4">04</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Strategic Differentiation</div>
-        <div class="section-ko">전략적 차별화</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <p>10년 이상 양산 차량의 보드 레벨 회로 설계 및 전장품 개발을 수행해 온 실무 전문성과 최첨단 AI 기술력(계층적 강화학습 및 GNN)을 코어 엔진으로 결합했습니다.</p>
-      <p>특히 사내벤처로서 모기업 기술관리팀과 현업 설계팀이 수년간 축적해 온 <strong>'최종 양산 사양 맞춤형 데이터셋'에 직접 접근할 수 있다는 점</strong>이 일반 AI 스타트업이나 외주 업체가 절대 모방할 수 없는 압도적인 <strong>해자(Moat)</strong>입니다.</p>
-      <p>설계자들이 실제 양산 과정에서 수없이 튜닝·검증한 살아있는 데이터를 활용해 AI 모델을 선행 고도화함으로써, 단순한 배선 자동화를 넘어 즉각적으로 양산 투입이 가능한(Production-ready) 고신뢰성 PCB 데이터를 도출합니다.</p>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Unfair Advantage" 슬라이드에서 '모기업 양산 데이터 접근 권한'을 타 경쟁사가 절대 가질 수 없는 진입 장벽(비대칭 전력)으로 강력하게 어필할 때 활용하세요.</div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Unfair Advantage" 슬라이드에서 현업 전장 엔지니어의 도메인 지식과 딥테크(AI)의 융합 시너지를 강조할 때 활용하세요.</div>
-    </div>
-  </div>
-
-  <!-- 5. 경쟁 분석 -->
-  <div class="section" id="s5">
-    <div class="section-header">
-      <div class="section-num n5">05</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Competitive Analysis</div>
-        <div class="section-ko">경쟁 분석</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <div class="compare-grid">
-        <div class="compare-card bad">
-          <div class="compare-label">기존 대안의 한계</div>
-          <ul class="compare-list">
-            <li>디자인 하우스: 높은 비용 단가</li>
-            <li>디자인 하우스: 일정 병목 상시 발생</li>
-            <li>수작업: 잦은 휴먼 에러</li>
-            <li>수작업: 끝없는 수정-검증 루프</li>
-            <li>양산 지연 리스크</li>
-          </ul>
-        </div>
-        <div class="compare-card good">
-          <div class="compare-label">PCBeaver의 우위</div>
-          <ul class="compare-list">
-            <li>비용 60% 이상 절감</li>
-            <li>시간 90% 이상 단축</li>
-            <li>1-Pass 무결점 설계</li>
-            <li>사후 재점검 프로세스 간소화</li>
-            <li>즉시 양산 투입 가능</li>
-          </ul>
-        </div>
-      </div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Competition" 슬라이드에서 기존 대안(외주 대기, 수작업 야근)의 한계점과 당사의 강점(속도, 비용, 1-Pass 품질)을 맵핑하는 매트릭스에 활용하세요.</div>
-    </div>
-  </div>
-
-  <!-- 6. 고객 획득 전략 -->
-  <div class="section" id="s6">
-    <div class="section-header">
-      <div class="section-num n6">06</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Customer Acquisition Strategy</div>
-        <div class="section-ko">고객 획득 전략</div>
-      </div>
-    </div>
-    <div class="section-body">
-      <p>2027년 하반기부터 6개월간 3개 이상의 핵심 설계팀을 타깃으로 기존 디자인 하우스 의뢰와 병행할 수 있는 <strong>'무료 파일럿(PoC) 트랙'</strong>을 가동합니다. 이후 신규 고객사에는 <strong>'1개월 무료 온보딩'</strong> 기간을 부여하고, 고객사 고유 데이터를 AI에 맞춤 학습시켜 유료 서비스로 전환하는 강력한 락인(Lock-in) 전략을 구사합니다.</p>
-      <p style="font-weight:700; color:var(--text); margin-bottom:12px;">3단계 침투 전략</p>
-      <div class="steps">
-        <div class="step">
-          <div class="step-num n6">1</div>
-          <div class="step-body">
-            <div class="step-target">타깃 — 병목 현상 겪는 실무 엔지니어</div>
-            <div class="step-action">무료 PoC 트랙 제공 → 일정 단축 & 양산 품질을 직접 체감하게 유도</div>
+      <div class="s-body">
+        <div class="s-title">목표 고객</div>
+        <p class="s-sub">일정 압박과 품질 책임을 동시에 지는 두 가지 핵심 페르소나</p>
+        <div class="grid2" style="margin-bottom:18px;">
+          <div class="card border-blue bg-blue">
+            <h3>In-house Engineer</h3>
+            <p style="font-size:1rem; font-weight:700; margin-bottom:8px;">전장품 설계 기업의 하드웨어 엔지니어</p>
+            <p>자체 제품 개발사 내부 설계자. 타임 투 마켓을 지키면서 전기적·물리적 제약 조건 100% 충족, 단 한 번에 무결점 결과물을 완성해야 합니다.</p>
+          </div>
+          <div class="card border-mint bg-mint">
+            <h3>Design House</h3>
+            <p style="font-size:1rem; font-weight:700; margin-bottom:8px;">외주 물량을 처리하는 PCB 디자인 하우스</p>
+            <p>CAPA = 수익성. 속도와 정확도가 곧 이익으로 연결되는 외주 전문 조직. 반복 수정 비용이 사업성의 핵심 리스크입니다.</p>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num n6">2</div>
-          <div class="step-body">
-            <div class="step-target">타깃 — 조직장 / 예산 운영팀</div>
-            <div class="step-action">60% 비용 절감 근거로 연 3억 규모 예산 확보 → 기존 외주 시장 완전 대체(Replace)</div>
+        <div class="grid2">
+          <div class="card">
+            <h3>기능적 과업</h3>
+            <ul class="ulist">
+              <li>복잡한 PCB 라우팅을 신속하게 완료</li>
+              <li>DRC / DFM 체크를 1-Pass로 통과</li>
+              <li>재작업(Rework) 없는 완성형 산출물 도출</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>정서적·사회적 과업</h3>
+            <ul class="ulist">
+              <li>잦은 변경·지연에서 오는 야근 스트레스 해소</li>
+              <li>팀과 고객사로부터 설계 신뢰 확보</li>
+              <li>핵심 업무 집중 시간 확보 → 커리어 성장</li>
+            </ul>
           </div>
         </div>
-        <div class="step">
-          <div class="step-num n6">3</div>
-          <div class="step-body">
-            <div class="step-target">타깃 — 신규 고객사</div>
-            <div class="step-action">1개월 무료 온보딩 → 맞춤 AI 학습 → 유료 전환 (Lock-in)</div>
+        <div class="pitch-hint">"Who We Serve" — 고객을 단순 산업군이 아닌 "실무 압박을 지는 사람"으로 정의할 때 공감이 극대화됩니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 02: PROBLEM ══ -->
+  <div class="slide" id="s2">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--amber),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">02 / 08</span>
+        <span class="s-tag">Problem</span>
+      </div>
+      <div class="s-body">
+        <div class="s-title">해결할 문제</div>
+        <p class="s-sub">설계 변경이 생길 때마다 엔지니어는 처음부터 다시 시작한다</p>
+        <div class="grid2" style="margin-bottom:16px; align-items:start;">
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card border-rose bg-rose">
+              <h3>ECO 지옥</h3>
+              <p>기구 외곽선 변경 또는 OEM 요구사항 수정 시 처음부터 라우팅 재설계. 핵심 인력 시간이 반복 수작업에 통째로 소모됩니다.</p>
+            </div>
+            <div class="card border-rose bg-rose">
+              <h3>끝없는 수정-검증 루프</h3>
+              <p>설계 완료 후에도 체크리스트·DR 과정에서 오류가 발견되면 재설계 늪으로 다시 되돌아갑니다.</p>
+            </div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:12px;">
+            <div class="card border-amber bg-amber">
+              <h3>외주 CAPA 병목</h3>
+              <p>디자인 하우스에 의뢰해도 CAPA 초과 시 긴급 프로젝트가 무기한 대기. 양산 일정 지연이 프로젝트 전체 리스크로 확산됩니다.</p>
+            </div>
+            <div class="card border-amber bg-amber">
+              <h3>휴먼 에러 & 재작업</h3>
+              <p>수작업 반복은 필연적으로 에러를 동반합니다. 수정·재검증 비용이 누적될수록 납기와 품질 모두 붕괴됩니다.</p>
+            </div>
           </div>
         </div>
+        <div class="card" style="background:rgba(240,64,96,0.06); border-color:rgba(240,64,96,0.2);">
+          <p style="font-size:0.92rem; line-height:1.7;">문제의 본질은 설계 품질만이 아닙니다. <strong>반복되는 재작업이 팀 생산성과 일정 신뢰를 동시에 붕괴시킨다</strong>는 점이 진짜 페인 포인트입니다.</p>
+        </div>
+        <div class="pitch-hint">"Problem" — 한 명의 엔지니어가 외곽 수정 → 재라우팅 → 리뷰 피드백 → 재검증을 무한 반복하는 장면으로 스토리텔링하세요.</div>
       </div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Go-to-Market" 슬라이드에서 3단계 침투 전략 로드맵으로 도식화하여 활용하세요.</div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Go-to-Market" 슬라이드에서 거점 고객 확보 후 2차 협력사 및 글로벌 OEM으로 확산해 나가는 단계별 진입 전략을 제시할 때 활용하세요.</div>
     </div>
   </div>
 
-  <!-- 7. 수익화 전략 -->
-  <div class="section" id="s7">
-    <div class="section-header">
-      <div class="section-num n7">07</div>
-      <div class="section-title-wrap">
-        <div class="section-en">Revenue Strategy</div>
-        <div class="section-ko">수익화 전략</div>
+  <!-- ══ SLIDE 03: SOLUTION ══ -->
+  <div class="slide" id="s3">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--mint),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">03 / 08</span>
+        <span class="s-tag">Solution & Value Proposition</span>
       </div>
-    </div>
-    <div class="section-body">
-      <p>타깃 시장을 대상으로 유연한 <strong>투트랙(Two-track) 과금 구조</strong>를 설계했습니다. 두 모델 모두 제공하는 비용 단축 효과에 기반한 <strong>가치 기반(Value-based) 가격 책정</strong> 방식을 채택하여 거부감을 낮추었습니다.</p>
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>모델</th>
-              <th>대상 고객</th>
-              <th>과금 방식</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><span class="badge b1">온디맨드 설계 과금</span></td>
-              <td>단발성·긴급 수요 고객</td>
-              <td>결과물 기준 건당 결제 (비정기)</td>
-            </tr>
-            <tr>
-              <td><span class="badge b3">연간 서비스 이용료</span></td>
-              <td>지속적 수요 기업</td>
-              <td>정기 선/후불 구독 (연간)</td>
-            </tr>
-          </tbody>
-        </table>
+      <div class="s-body">
+        <div class="s-title">솔루션</div>
+        <div style="margin-bottom:20px; padding:16px 22px; border-left:3px solid var(--mint); background:rgba(0,200,150,0.06); border-radius:0 12px 12px 0;">
+          <p style="font-size:1.18rem; font-weight:700; line-height:1.45; color:#fff; margin:0;">"단 한 번의 딸깍으로 검증과 재작업이 필요 없는 완성형 PCB를 가장 빠르고 저렴하게."</p>
+        </div>
+        <div class="flow" style="margin-bottom:18px;">
+          <div class="flow-step">
+            <div class="step-tag">Input</div>
+            <div class="step-title">회로도 + 외곽선 전달</div>
+            <div class="step-desc">기존 외주와 완전히 동일한 방식. 새 툴 학습 불필요.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="background:rgba(29,111,232,0.08); border-color:rgba(29,111,232,0.2);">
+            <div class="step-tag">Engine</div>
+            <div class="step-title">고객사 룰 반영 AI 설계</div>
+            <div class="step-desc">Design Rule 선제 적용 → 양산 전제 설계 수행.</div>
+          </div>
+          <div class="flow-arrow">→</div>
+          <div class="flow-step" style="background:rgba(0,200,150,0.08); border-color:rgba(0,200,150,0.2);">
+            <div class="step-tag">Output</div>
+            <div class="step-title">완성형 PCB 산출물 납품</div>
+            <div class="step-desc">사후 검증 부담 최소화. 즉시 양산 투입 가능.</div>
+          </div>
+        </div>
+        <div class="grid3">
+          <div class="card" style="text-align:center;">
+            <div class="stat c-blue">90%+</div>
+            <div class="stat-label">인간 설계자·디자인 하우스 대비<br/>소요 시간 단축</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat c-mint">60%+</div>
+            <div class="stat-label">기존 외주 설계 비용 대비<br/>절감 가능 단가 구조</div>
+          </div>
+          <div class="card" style="text-align:center;">
+            <div class="stat c-amber">Zero</div>
+            <div class="stat-label">고객 학습 부담<br/>도입 장벽 Zero</div>
+          </div>
+        </div>
+        <div class="pitch-hint">"Solution" — '기존 프로세스 유지'와 '압도적 속도·비용 개선'을 한 화면에서 대비시키세요.</div>
       </div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Business & Revenue Model" 슬라이드에서 고객의 특성(단발성 vs 지속성)에 맞춰 확장 가능한 안정적인 수익 모델을 보여줄 때 활용하세요.</div>
     </div>
   </div>
 
-  <!-- 8. KPI -->
-  <div class="section" id="s8">
-    <div class="section-header">
-      <div class="section-num n8">08</div>
-      <div class="section-title-wrap">
-        <div class="section-en">KPIs & Market Size</div>
-        <div class="section-ko">핵심성과지표</div>
+  <!-- ══ SLIDE 04: DIFFERENTIATION ══ -->
+  <div class="slide" id="s4">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--purple),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">04 / 08</span>
+        <span class="s-tag">Unfair Advantage</span>
       </div>
-    </div>
-    <div class="section-body">
-      <p>전체 3조 원 규모로 추산되는 약 2,000개 사의 국내 1·2차 협력업체(PCB 전장 설계 업체) 시장을 핵심 공략 시장으로 설정했습니다.</p>
-
-      <div class="formula">
-        2,000개 사 &nbsp;×&nbsp; 침투율 10% &nbsp;×&nbsp; 연 20회 &nbsp;×&nbsp; 객단가 1,000만 원<br/>
-        <span style="font-size:1.3rem; color:#fff; margin-top:8px; display:block;">= 연간 <strong style="color:var(--accent2);">400억 원</strong></span>
+      <div class="s-body">
+        <div class="s-title">전략적 차별화</div>
+        <p class="s-sub">일반 AI 스타트업이나 외주 업체가 절대 복제할 수 없는 두 가지 해자</p>
+        <div class="grid2" style="margin-bottom:16px;">
+          <div class="card border-purple" style="background:rgba(139,92,246,0.08);">
+            <h3 style="color:var(--purple);">Data Moat</h3>
+            <p style="font-size:1rem; font-weight:700; margin-bottom:8px;">최종 양산 사양 맞춤형 데이터셋 직접 접근권</p>
+            <p>모기업 기술관리팀과 현업 설계팀이 수년간 축적한 살아있는 양산 데이터. 실제 양산 과정에서 수없이 튜닝·검증된 데이터로 AI를 선행 고도화합니다.</p>
+          </div>
+          <div class="card border-blue" style="background:rgba(29,111,232,0.08);">
+            <h3 style="color:var(--blue);">Domain Moat</h3>
+            <p style="font-size:1rem; font-weight:700; margin-bottom:8px;">10년+ 전장 설계 실무 + 딥테크(AI) 융합</p>
+            <p>계층적 강화학습(HRL) + GNN 기반 AI 엔진. 단순 배선 자동화를 넘어 즉각 양산 투입 가능한 Production-ready PCB 데이터를 목표합니다.</p>
+          </div>
+        </div>
+        <div class="card" style="background:rgba(139,92,246,0.06); border-color:rgba(139,92,246,0.2); margin-bottom:16px;">
+          <p style="font-size:0.95rem; line-height:1.7;">이 두 가지의 결합이 <strong style="color:var(--purple);">경쟁사가 단기간에 따라올 수 없는 기술적 해자</strong>를 만듭니다. 외부 스타트업은 양산 데이터를 확보하는 데만 수년이 필요하고, 기존 설계자는 AI 기술력이 없습니다.</p>
+        </div>
+        <div class="grid3">
+          <div class="card" style="text-align:center;"><div class="stat c-purple">10년+</div><div class="stat-label">전장품 설계 실무<br/>도메인 경험</div></div>
+          <div class="card" style="text-align:center;"><div class="stat c-purple">HRL</div><div class="stat-label">계층적 강화학습<br/>+ GNN 코어 엔진</div></div>
+          <div class="card" style="text-align:center;"><div class="stat c-purple">내부</div><div class="stat-label">양산 사양 맞춤형<br/>데이터 직접 접근</div></div>
+        </div>
+        <div class="pitch-hint">"Unfair Advantage" — '데이터 접근권'과 '도메인 지식'을 비대칭 전력으로 분리해 두 개의 해자로 명확히 제시하세요.</div>
       </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr><th>KPI 항목</th><th>목표값</th><th>비고</th></tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>타깃 시장 규모</td>
-              <td><span class="badge b5">3조 원 (2,000개 사)</span></td>
-              <td>국내 1·2차 협력업체 기준</td>
-            </tr>
-            <tr>
-              <td>초기 침투율</td>
-              <td><span class="badge b1">10%</span></td>
-              <td>200개 사 확보 목표</td>
-            </tr>
-            <tr>
-              <td>연간 이용 빈도</td>
-              <td><span class="badge b4">20회 / 사</span></td>
-              <td>평균 PCB 프로젝트 발생 빈도</td>
-            </tr>
-            <tr>
-              <td>객단가</td>
-              <td><span class="badge b2">1,000만 원 / 건</span></td>
-              <td>가치 기반 책정</td>
-            </tr>
-            <tr>
-              <td>연간 성장률</td>
-              <td><span class="badge b3">7%</span></td>
-              <td>업계 평균</td>
-            </tr>
-            <tr>
-              <td><strong>목표 연매출</strong></td>
-              <td><span class="badge b6" style="font-size:0.88rem; padding:4px 14px;">약 400억 원</span></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="tip"><span class="tip-icon">💡</span><strong>피치덱 활용 포인트</strong> — "Market Size & Financial Projections" 슬라이드에서 구체적인 변수(2,000개 사, 10% 침투율, 객단가 1,000만 원)에 근거한 타당성 있는 400억 매출 달성 로직을 보여줄 때 활용하세요.</div>
     </div>
   </div>
 
-</main>
+  <!-- ══ SLIDE 05: COMPETITION ══ -->
+  <div class="slide" id="s5">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--rose),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">05 / 08</span>
+        <span class="s-tag">Competitive Analysis</span>
+      </div>
+      <div class="s-body">
+        <div class="s-title">경쟁 분석</div>
+        <p class="s-sub">기존 대안 vs PCBeaver — 속도 · 비용 · 품질 · 도입 장벽 4축 비교</p>
+        <div class="grid2" style="margin-bottom:16px;">
+          <div class="card border-rose bg-rose">
+            <h3 style="color:var(--rose);">기존 대안의 한계</h3>
+            <div class="vs-col">
+              <div class="vs-item"><span class="icon c-rose">✕</span>디자인 하우스: 높은 단가 + 일정 병목 상시 발생</div>
+              <div class="vs-item"><span class="icon c-rose">✕</span>디자인 하우스: CAPA 초과 시 긴급 프로젝트 무기한 대기</div>
+              <div class="vs-item"><span class="icon c-rose">✕</span>수작업 라우팅: 잦은 휴먼 에러 + 끝없는 수정 루프</div>
+              <div class="vs-item"><span class="icon c-rose">✕</span>두 방식 모두: ECO 발생 시 처음부터 재작업</div>
+            </div>
+          </div>
+          <div class="card border-mint bg-mint">
+            <h3 style="color:var(--mint);">PCBeaver</h3>
+            <div class="vs-col">
+              <div class="vs-item"><span class="icon c-mint">✓</span>기존 외주와 동일한 입력 방식 → 도입 장벽 Zero</div>
+              <div class="vs-item"><span class="icon c-mint">✓</span>60% 이상 저렴한 비용으로 90% 이상 빠른 납기</div>
+              <div class="vs-item"><span class="icon c-mint">✓</span>사후 재점검 부담 대폭 감소 (1-Pass 목표)</div>
+              <div class="vs-item"><span class="icon c-mint">✓</span>ECO 발생 시 재입력만으로 즉각 재산출</div>
+            </div>
+          </div>
+        </div>
+        <div class="t-wrap">
+          <table>
+            <thead><tr><th>기준</th><th>디자인 하우스 외주</th><th>수작업 라우팅</th><th>PCBeaver</th></tr></thead>
+            <tbody>
+              <tr><td>비용</td><td>높음 (건당 1,000만+)</td><td>인건비 100%</td><td style="color:var(--mint);">60%+ 절감</td></tr>
+              <tr><td>납기</td><td>수 주 ~ 무기한 대기</td><td>수 일 ~ 수 주</td><td style="color:var(--mint);">90%+ 단축</td></tr>
+              <tr><td>ECO 대응</td><td>재의뢰 후 대기</td><td>처음부터 재작업</td><td style="color:var(--mint);">즉시 재산출</td></tr>
+              <tr><td>도입 장벽</td><td>낮음 (익숙한 방식)</td><td>없음 (수작업)</td><td style="color:var(--mint);">낮음 (동일 프로세스)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="pitch-hint">"Competition" — 4축 비교 매트릭스에서 PCBeaver가 '비용·속도·품질·장벽' 모두 우위임을 한눈에 보여주세요.</div>
+      </div>
+    </div>
+  </div>
 
-<footer>
-  PCBeaver · 2026 제로원 컴퍼니빌더 교육 · 사내 스타트업 사업계획 마일스톤
-</footer>
+  <!-- ══ SLIDE 06: GTM ══ -->
+  <div class="slide" id="s6">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,#1572b3,transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">06 / 08</span>
+        <span class="s-tag">Go-to-Market</span>
+      </div>
+      <div class="s-body">
+        <div class="s-title">고객 획득 전략</div>
+        <p class="s-sub">Pilot → Budget → Lock-in · 2027H2부터 3단계 침투</p>
+        <div class="roadmap" style="margin-bottom:16px;">
+          <div class="rm-step">
+            <div class="rm-badge">STEP 1 · 2027H2</div>
+            <div class="rm-who">병목 겪는 실무 엔지니어</div>
+            <div class="rm-what">기존 디자인 하우스 의뢰와 병행 가능한 <strong>무료 PoC 트랙</strong> 운영 (3개+ 핵심 설계팀). 일정 단축·품질 개선 효과를 실무진이 직접 체감하게 합니다.</div>
+          </div>
+          <div class="rm-step" style="border-color:rgba(29,111,232,0.2); background:rgba(29,111,232,0.06);">
+            <div class="rm-badge">STEP 2 · 2028H1</div>
+            <div class="rm-who">조직장 / 예산 운영팀</div>
+            <div class="rm-what">기존 외주 용역 대비 <strong>60% 절감된 단가</strong>와 연 3억 원 수준의 예산 대체 논리로 계약 전환. 기존 외주 시장을 완전히 대체(Replace)합니다.</div>
+          </div>
+          <div class="rm-step" style="border-color:rgba(0,200,150,0.2); background:rgba(0,200,150,0.06);">
+            <div class="rm-badge">STEP 3 · 확장</div>
+            <div class="rm-who">신규 고객사</div>
+            <div class="rm-what"><strong>1개월 무료 온보딩</strong> 후 고객사 고유 설계 데이터를 AI에 맞춤 학습 → 유료 전환 유도. 데이터 락인 구조로 장기 고객 관계를 구축합니다.</div>
+          </div>
+        </div>
+        <div class="grid3">
+          <div class="card" style="text-align:center;"><div class="stat c-blue">3+</div><div class="stat-label">초기 핵심 설계팀<br/>PoC 타깃</div></div>
+          <div class="card" style="text-align:center;"><div class="stat c-mint">3억</div><div class="stat-label">팀당 연간<br/>예산 대체 규모</div></div>
+          <div class="card" style="text-align:center;"><div class="stat c-amber">Lock-in</div><div class="stat-label">데이터 맞춤 학습으로<br/>전환 비용 창출</div></div>
+        </div>
+        <div class="pitch-hint">"Go-to-Market" — 3단계 타임라인 + 마지막 데이터 락인 구조를 한 장 로드맵으로 도식화하면 설득력이 높습니다.</div>
+      </div>
+    </div>
+  </div>
 
+  <!-- ══ SLIDE 07: REVENUE ══ -->
+  <div class="slide" id="s7">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--mint),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">07 / 08</span>
+        <span class="s-tag">Revenue Strategy</span>
+      </div>
+      <div class="s-body">
+        <div class="s-title">수익화 전략</div>
+        <p class="s-sub">단발성 수요와 지속 수요를 동시에 흡수하는 Two-track 과금 구조</p>
+        <div class="grid2" style="margin-bottom:16px;">
+          <div class="card border-mint bg-mint">
+            <div class="badge" style="background:rgba(0,200,150,0.15); color:var(--mint); margin-bottom:12px;">Subscription</div>
+            <p style="font-size:1.05rem; font-weight:700; margin-bottom:8px;">연간 서비스 이용료</p>
+            <ul class="ulist">
+              <li>지속적 수요 기업 대상 정기 선/후불 결제</li>
+              <li>PCB 자동화 설계 엔진 사용권 제공</li>
+              <li>가치 기반(Value-based) 가격 책정으로 거부감 최소화</li>
+            </ul>
+          </div>
+          <div class="card border-amber bg-amber">
+            <div class="badge" style="background:rgba(245,166,35,0.15); color:var(--amber); margin-bottom:12px;">On-demand</div>
+            <p style="font-size:1.05rem; font-weight:700; margin-bottom:8px;">건별 설계 과금</p>
+            <ul class="ulist">
+              <li>단발성·긴급 수정·프로젝트성 수요 대응</li>
+              <li>산출물 결과 기준 비정기 현금 결제</li>
+              <li>첫 진입 장벽 최소화 → 구독 전환 유도</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid3">
+          <div class="card">
+            <h3>과금 기준</h3>
+            <ul class="ulist" style="font-size:0.86rem;">
+              <li>기능 기반: 엔진 사용 권한 자체</li>
+              <li>사용량 기반: 이용량 비례</li>
+              <li>결과 기반: 산출물 건당</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>가격 책정 방식</h3>
+            <ul class="ulist" style="font-size:0.86rem;">
+              <li>비용 기반: 원가 + 마진</li>
+              <li>경쟁 기반: 외주 시세 대비</li>
+              <li>가치 기반: 절감 효과 반영</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>결제 구조</h3>
+            <ul class="ulist" style="font-size:0.86rem;">
+              <li>선불 vs 후불 선택 가능</li>
+              <li>정기(묵시적 갱신) vs 비정기</li>
+              <li>구매(소유) vs 대여(이용) 옵션</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pitch-hint">"Business Model" — 단발성·지속성 수요를 동시에 흡수하는 구조와 고객이 가격을 받아들이는 이유를 함께 설명하세요.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SLIDE 08: KPI ══ -->
+  <div class="slide" id="s8">
+    <div class="slide-inner">
+      <div class="accent-line" style="background:linear-gradient(90deg,var(--amber),transparent);"></div>
+      <div class="s-header">
+        <span class="s-num">08 / 08</span>
+        <span class="s-tag">Market Size & KPIs</span>
+      </div>
+      <div class="s-body">
+        <div class="s-title">핵심성과지표</div>
+        <p class="s-sub">Bottom-up 산출 로직 — 2,000개 사 × 10% × 20회 × 1,000만 원</p>
+        <div class="grid5" style="margin-bottom:16px;">
+          <div class="card" style="text-align:center;"><div class="stat" style="font-size:2rem; color:var(--blue);">2,000</div><div class="stat-label">국내 타깃<br/>PCB 설계 업체 수</div></div>
+          <div class="card" style="text-align:center;"><div class="stat" style="font-size:2rem; color:var(--mint);">10%</div><div class="stat-label">초기<br/>침투율 목표</div></div>
+          <div class="card" style="text-align:center;"><div class="stat" style="font-size:2rem; color:var(--amber);">20회</div><div class="stat-label">사당 연간<br/>이용 빈도</div></div>
+          <div class="card" style="text-align:center;"><div class="stat" style="font-size:2rem; color:var(--rose);">1,000만</div><div class="stat-label">건당 평균<br/>객단가 (원)</div></div>
+          <div class="card" style="text-align:center;"><div class="stat" style="font-size:2rem; color:var(--purple);">7%</div><div class="stat-label">업계 연간<br/>성장률</div></div>
+        </div>
+        <div class="formula-box" style="margin-bottom:16px;">
+          2,000개 사 &nbsp;×&nbsp; 10% &nbsp;×&nbsp; 연 20회 &nbsp;×&nbsp; 1,000만 원<br/>
+          <span class="formula-result">=&nbsp; 연간 약 400억 원</span>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <h3>고객 수 분해 (Q)</h3>
+            <ul class="ulist" style="font-size:0.86rem;">
+              <li>전국 PCB 제조·설계 업체 수 → 자동화 미도입 업체 → 타깃 공정 보유 업체</li>
+              <li>국내 1·2차 협력업체 기준 3조 원 규모 시장</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>객단가 분해 (P)</h3>
+            <ul class="ulist" style="font-size:0.86rem;">
+              <li>구독형: 월 이용료 × 12개월</li>
+              <li>건당 결제: 1회 이용료 × 연간 이용 빈도</li>
+              <li>가치 기반: 외주비 절감 효과 반영 책정</li>
+            </ul>
+          </div>
+        </div>
+        <div class="pitch-hint">"Market Size" — 시장 크기보다 '변수별 가정이 어떻게 매출로 연결되는지'를 보여주는 로직이 투자자를 설득합니다.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /deck -->
+</div><!-- /scale-wrap -->
+
+<!-- ── HUD ── -->
+<div id="hud">
+  <button id="btn-prev" title="이전 (←)">←</button>
+  <div class="dot-row" id="dots"></div>
+  <span id="slide-counter">1 / 9</span>
+  <button id="btn-next" title="다음 (→)">→</button>
+</div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total  = slides.length;
+  let cur = 0;
+
+  const dotsWrap = document.getElementById('dots');
+  const counter  = document.getElementById('slide-counter');
+
+  // 도트 생성
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' on' : '');
+    d.addEventListener('click', () => go(i));
+    dotsWrap.appendChild(d);
+  });
+
+  function go(n) {
+    slides[cur].classList.remove('active');
+    dotsWrap.children[cur].classList.remove('on');
+    cur = (n + total) % total;
+    slides[cur].classList.add('active');
+    dotsWrap.children[cur].classList.add('on');
+    counter.textContent = `${cur + 1} / ${total}`;
+  }
+
+  document.getElementById('btn-prev').addEventListener('click', () => go(cur - 1));
+  document.getElementById('btn-next').addEventListener('click', () => go(cur + 1));
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); go(cur + 1); }
+    if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')                    { e.preventDefault(); go(cur - 1); }
+  });
+
+  // 터치 스와이프
+  let tx = 0;
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; });
+  document.addEventListener('touchend',   e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 40) go(dx < 0 ? cur + 1 : cur - 1);
+  });
+
+  // 슬라이드 16:9 스케일 맞춤
+  const W = 1280, H = 720;
+  function resize() {
+    const sw = window.innerWidth, sh = window.innerHeight;
+    const scale = Math.min(sw / W, sh / H) * 0.93;
+    document.getElementById('deck').style.transform = `scale(${scale})`;
+    document.getElementById('deck').style.width  = W + 'px';
+    document.getElementById('deck').style.height = H + 'px';
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // 첫 슬라이드 활성화
+  slides[0].classList.add('active');
+</script>
 </body>
 </html>
