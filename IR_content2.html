@@ -2,515 +2,473 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>PCBeaver IR Deck v2 · 2026</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--W:1280px;--H:720px;--blue:#1d6fe8;--mint:#00c896;--amber:#f5a623;--rose:#f04060;--purple:#8b5cf6;--gold:#e8c84a;--text:#f0f4ff;--muted:#7a8fae;--line:rgba(255,255,255,0.08)}
+:root{
+  --W:1280px;--H:720px;
+  --blue:#1d6fe8;--mint:#00c896;--amber:#f5a623;
+  --rose:#f04060;--purple:#8b5cf6;--gold:#e8c84a;
+  --text:#f0f4ff;--muted:#7a8fae;--line:rgba(255,255,255,0.08);
+}
 html,body{width:100%;height:100%;overflow:hidden;background:#040b18;font-family:'Inter',sans-serif;color:var(--text)}
 #sw{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
 #deck{position:relative;width:var(--W);height:var(--H)}
-.slide{position:absolute;inset:0;border-radius:18px;overflow:hidden;display:none;flex-direction:column;background:linear-gradient(158deg,#080f1e 0%,#0b1628 55%,#091220 100%)}
+.slide{
+  position:absolute;inset:0;border-radius:18px;overflow:hidden;display:none;flex-direction:column;
+  background:linear-gradient(158deg,#080f1e 0%,#0b1628 55%,#091220 100%);
+}
 .slide.active{display:flex}
-.slide::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.022)1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022)1px,transparent 1px);background-size:44px 44px;mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent 50%)}
+.slide::before{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.022)1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.022)1px,transparent 1px);
+  background-size:44px 44px;mask-image:linear-gradient(180deg,rgba(0,0,0,.5),transparent 50%);
+}
 .aln{position:absolute;top:0;left:48px;right:48px;height:2px;border-radius:0 0 3px 3px;z-index:2}
-.sh{position:relative;z-index:1;padding:22px 48px 0;display:flex;align-items:center;gap:10px;flex-shrink:0}
-.sn{font-size:.64rem;font-weight:900;letter-spacing:.16em;color:var(--blue)}
-.st{font-size:.64rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid rgba(255,255,255,.1);padding:3px 10px;border-radius:999px}
-.sr{margin-left:auto;font-size:.62rem;font-weight:700;color:rgba(255,255,255,.28);max-width:400px;text-align:right;line-height:1.4}
-.sb{position:relative;z-index:1;flex:1;padding:10px 48px 18px;display:flex;flex-direction:column;overflow:hidden}
-.ttl{font-size:2.1rem;font-weight:900;line-height:1;letter-spacing:-.04em;margin-bottom:3px}
-.sub{font-size:.8rem;color:var(--muted);line-height:1.55;max-width:720px;margin-bottom:9px}
+.sh{position:relative;z-index:1;padding:26px 48px 0;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.sn{font-size:.66rem;font-weight:900;letter-spacing:.16em;color:var(--blue)}
+.st{font-size:.66rem;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);border:1px solid rgba(255,255,255,.1);padding:4px 11px;border-radius:999px}
+.sr{margin-left:auto;font-size:.66rem;font-weight:700;color:rgba(255,255,255,.28);max-width:420px;text-align:right;line-height:1.45}
+.sb{position:relative;z-index:1;flex:1;padding:14px 48px 24px;display:flex;flex-direction:column;overflow:hidden}
+.ttl{font-size:2.5rem;font-weight:900;line-height:1.02;letter-spacing:-.04em;margin-bottom:4px}
+.sub{font-size:.86rem;color:var(--muted);line-height:1.58;max-width:740px;margin-bottom:12px}
 strong{color:var(--text)}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.card{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
-.card h3{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
-.card p{font-size:.77rem;line-height:1.52;color:rgba(240,244,255,.82)}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:11px}
+.card{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.card h3{font-size:.65rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.card p{font-size:.81rem;line-height:1.57;color:rgba(240,244,255,.82)}
 .cb{border-color:rgba(29,111,232,.38)!important;background:rgba(29,111,232,.09)!important}
 .cm{border-color:rgba(0,200,150,.38)!important;background:rgba(0,200,150,.09)!important}
 .ca{border-color:rgba(245,166,35,.38)!important;background:rgba(245,166,35,.09)!important}
 .cr{border-color:rgba(240,64,96,.38)!important;background:rgba(240,64,96,.09)!important}
 .cp{border-color:rgba(139,92,246,.38)!important;background:rgba(139,92,246,.09)!important}
 .cg{border-color:rgba(232,200,74,.38)!important;background:rgba(232,200,74,.09)!important}
-.stat{font-size:1.9rem;font-weight:900;letter-spacing:-.04em;line-height:1}
-.stat-s{font-size:1.35rem;font-weight:900;letter-spacing:-.04em;line-height:1}
-.sl{font-size:.69rem;color:var(--muted);margin-top:4px;line-height:1.38}
-.c-bl{color:var(--blue)}.c-mn{color:var(--mint)}.c-am{color:var(--amber)}.c-ro{color:var(--rose)}.c-pu{color:var(--purple)}.c-gd{color:var(--gold)}
-.flow{display:flex;margin-bottom:9px}
-.fs{flex:1;padding:9px 11px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-.fs:first-child{border-radius:9px 0 0 9px}.fs:last-child{border-radius:0 9px 9px 0}
-.fa{display:flex;align-items:center;padding:0 3px;color:var(--muted);font-size:.9rem}
-.fs .ft{font-size:.56rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-.fs .ftt{font-size:.8rem;font-weight:700;margin-bottom:2px}
-.fs .fd{font-size:.69rem;color:rgba(240,244,255,.55);line-height:1.4}
-.hook{padding:10px 14px;border-left:3px solid var(--mint);background:rgba(0,200,150,.07);border-radius:0 9px 9px 0;font-size:.88rem;font-weight:700;line-height:1.4;color:#fff;margin-bottom:10px}
-.hook-r{border-left-color:var(--rose)!important;background:rgba(240,64,96,.07)!important}
-.hook-g{border-left-color:var(--gold)!important;background:rgba(232,200,74,.07)!important}
-.hook-b{border-left-color:var(--blue)!important;background:rgba(29,111,232,.07)!important}
-.divl{font-size:.58rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;padding-bottom:3px;border-bottom:1px solid var(--line)}
-.tw{border:1px solid var(--line);border-radius:9px;overflow:hidden;background:rgba(255,255,255,.03)}
+.stat{font-size:2.1rem;font-weight:900;letter-spacing:-.04em;line-height:1}
+.stat-s{font-size:1.5rem;font-weight:900;letter-spacing:-.04em;line-height:1}
+.sl{font-size:.73rem;color:var(--muted);margin-top:5px;line-height:1.4}
+.c-bl{color:var(--blue)}.c-mn{color:var(--mint)}.c-am{color:var(--amber)}.c-ro{color:var(--rose)}.c-pu{color:var(--purple)}
+.flow{display:flex;margin-bottom:11px}
+.fs{flex:1;padding:11px 13px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.fs:first-child{border-radius:10px 0 0 10px}.fs:last-child{border-radius:0 10px 10px 0}
+.fa{display:flex;align-items:center;padding:0 4px;color:var(--muted);font-size:.95rem}
+.fs .ft{font-size:.59rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fs .ftt{font-size:.85rem;font-weight:700;margin-bottom:3px}
+.fs .fd{font-size:.74rem;color:rgba(240,244,255,.58);line-height:1.44}
+.hook{padding:12px 16px;border-left:3px solid var(--mint);background:rgba(0,200,150,.07);border-radius:0 10px 10px 0;font-size:.97rem;font-weight:700;line-height:1.42;color:#fff;margin-bottom:12px}
+.divl{font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.tw{border:1px solid var(--line);border-radius:10px;overflow:hidden;background:rgba(255,255,255,.03)}
 table{width:100%;border-collapse:collapse}
-th{font-size:.57rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:5px 9px;border-bottom:1px solid var(--line);text-align:left;background:rgba(255,255,255,.03)}
-td{font-size:.74rem;padding:5px 9px;border-bottom:1px solid var(--line);color:rgba(240,244,255,.82);line-height:1.4}
+th{font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:7px 11px;border-bottom:1px solid var(--line);text-align:left;background:rgba(255,255,255,.03)}
+td{font-size:.79rem;padding:7px 11px;border-bottom:1px solid var(--line);color:rgba(240,244,255,.82);line-height:1.44}
 tr:last-child td{border-bottom:none}
-.arch{display:flex;align-items:stretch;margin-bottom:9px}
-.arch-step{flex:1;padding:9px 11px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
-.arch-step:first-child{border-radius:9px 0 0 9px}.arch-step:last-child{border-radius:0 9px 9px 0}
-.arch-arr{display:flex;align-items:center;padding:0 3px;color:var(--muted);font-size:.85rem}
-.arch-num{font-size:.54rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;margin-bottom:2px}
-.arch-title{font-size:.82rem;font-weight:800;margin-bottom:2px}
-.arch-desc{font-size:.69rem;color:rgba(240,244,255,.55);line-height:1.38}
-.ph{display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:999px;background:rgba(29,111,232,.1);border:1px solid rgba(29,111,232,.22);font-size:.63rem;font-weight:700;color:rgba(100,160,255,.9)}
-.ph::before{content:'💡';font-size:.6rem}
-.bdg{display:inline-flex;align-items:center;padding:2px 7px;border-radius:999px;font-size:.59rem;font-weight:800}
-.bdg-b{background:rgba(29,111,232,.18);color:#7ab5ff;border:1px solid rgba(29,111,232,.3)}
-.bdg-m{background:rgba(0,200,150,.18);color:#00dba7;border:1px solid rgba(0,200,150,.3)}
-.bdg-a{background:rgba(245,166,35,.18);color:#f5c06a;border:1px solid rgba(245,166,35,.3)}
-.bdg-r{background:rgba(240,64,96,.18);color:#f57a92;border:1px solid rgba(240,64,96,.3)}
-.bdg-p{background:rgba(139,92,246,.18);color:#c4a8ff;border:1px solid rgba(139,92,246,.3)}
+.arch{display:flex;align-items:stretch;margin-bottom:11px}
+.arch-step{flex:1;padding:11px 13px;background:rgba(255,255,255,.05);border:1px solid var(--line)}
+.arch-step:first-child{border-radius:10px 0 0 10px}.arch-step:last-child{border-radius:0 10px 10px 0}
+.arch-arr{display:flex;align-items:center;padding:0 5px;color:var(--muted);font-size:1rem}
+.arch-num{font-size:.57rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px}
+.arch-title{font-size:.87rem;font-weight:800;margin-bottom:4px}
+.arch-desc{font-size:.73rem;color:rgba(240,244,255,.57);line-height:1.4}
+.ph{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(29,111,232,.1);border:1px solid rgba(29,111,232,.22);font-size:.67rem;font-weight:700;color:rgba(100,160,255,.9)}
+.ph::before{content:'💡';font-size:.63rem}
+.fl{flex:1!important;min-height:0}
+.fl.g2,.fl.g3{align-content:stretch}
+.fl.tw{display:flex;flex-direction:column}
+.fl.tw table{flex:1}
+/* COVER */
 #s0{background:linear-gradient(140deg,#040c1c,#081422,#0a1830)!important}
 #s0::before{background:radial-gradient(ellipse 55% 50% at 80% 20%,rgba(29,111,232,.22),transparent),radial-gradient(ellipse 38% 38% at 10% 80%,rgba(0,200,150,.12),transparent)!important;mask-image:none!important}
 .cv{position:relative;z-index:1;display:flex;height:100%}
-.cv-l{flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:0 60px}
-.cv-tag{font-size:.6rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:8px}
-.cv-tag::before{content:'';width:18px;height:1px;background:var(--blue)}
-#s0 h1{font-size:3.6rem;font-weight:900;line-height:.9;letter-spacing:-.05em;max-width:580px}
+.cv-l{flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;padding:0 64px}
+.cv-tag{font-size:.64rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);display:flex;align-items:center;gap:8px}
+.cv-tag::before{content:'';width:20px;height:1px;background:var(--blue)}
+#s0 h1{font-size:4rem;font-weight:900;line-height:.92;letter-spacing:-.05em;max-width:620px}
 #s0 h1 em{color:var(--blue);font-style:normal}
-.cv-desc{font-size:.84rem;color:var(--muted);max-width:420px;line-height:1.65}
-.cv-nums{display:flex;gap:24px}
-.cv-num strong{display:block;font-size:1.5rem;font-weight:900;letter-spacing:-.04em}
-.cv-num span{font-size:.66rem;color:var(--muted)}
-.cv-r{width:290px;display:flex;flex-direction:column;gap:6px;justify-content:center;padding-right:48px}
-.cv-pill{padding:9px 12px;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.04)}
-.cv-pill strong{display:block;font-size:.57rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-.cv-pill span{font-size:.74rem;line-height:1.4;color:rgba(240,244,255,.8)}
-#hud{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:10px;z-index:200;background:rgba(6,12,26,.88);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);padding:6px 14px;border-radius:999px}
-#hud button{width:24px;height:24px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,.1);color:#fff;font-size:.8rem;display:flex;align-items:center;justify-content:center;transition:background .18s}
+.cv-desc{font-size:.9rem;color:var(--muted);max-width:440px;line-height:1.7}
+.cv-nums{display:flex;gap:28px}
+.cv-num strong{display:block;font-size:1.65rem;font-weight:900;letter-spacing:-.04em}
+.cv-num span{font-size:.7rem;color:var(--muted)}
+.cv-r{width:292px;display:flex;flex-direction:column;gap:8px;justify-content:center;padding-right:52px}
+.cv-pill{padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.04)}
+.cv-pill strong{display:block;font-size:.6rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.cv-pill span{font-size:.78rem;line-height:1.45;color:rgba(240,244,255,.8)}
+/* HUD */
+#hud{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:12px;z-index:200;background:rgba(6,12,26,.88);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.1);padding:7px 15px;border-radius:999px}
+#hud button{width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;background:rgba(255,255,255,.1);color:#fff;font-size:.82rem;display:flex;align-items:center;justify-content:center;transition:background .18s}
 #hud button:hover{background:var(--blue)}
-#sc{font-size:.69rem;font-weight:600;color:var(--muted);min-width:40px;text-align:center}
-.drow{display:flex;gap:3px}
+#sc{font-size:.73rem;font-weight:600;color:var(--muted);min-width:36px;text-align:center}
+.drow{display:flex;gap:4px}
 .dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .18s}
-.dot.on{background:var(--blue);width:12px;border-radius:3px}
+.dot.on{background:var(--blue);width:13px;border-radius:3px}
 </style>
 </head>
 <body>
 <div id="sw"><div id="deck">
 
-<!-- COVER -->
+<!-- ══ COVER ══ -->
 <div class="slide active" id="s0">
-<div class="cv">
-<div class="cv-l">
-<div class="cv-tag">2026 · PCBeaver · 사내벤처 IR Pitch Deck v2</div>
-<h1>PCB 설계,<br/><em>딸깍 한 번</em>으로.</h1>
-<p class="cv-desc">인하우스 설계팀과 디자인 하우스의 반복 재작업·외주 병목을<br/>AI 자동 설계로 대체합니다.</p>
-<div class="cv-nums">
-<div class="cv-num"><strong class="c-bl">90%↑</strong><span>리드타임 단축</span></div>
-<div class="cv-num"><strong class="c-mn">60%↓</strong><span>외주 비용 절감</span></div>
-<div class="cv-num"><strong class="c-am">200억</strong><span>3년차 목표 매출</span></div>
-</div>
-</div>
-<div class="cv-r">
-<div class="cv-pill"><strong>01–03 Problem / Solution / Product</strong><span>트릴레마 → 딸깍 한 번 → sLLM 3단계 AI 엔진</span></div>
-<div class="cv-pill"><strong>04 Strategic Value</strong><span>현대차그룹 기업가치 제고 — 디지털 자산화</span></div>
-<div class="cv-pill"><strong>05–06 GTM / Competition</strong><span>4단계 침투 전략 · Rule Pack + Validator Moat</span></div>
-<div class="cv-pill"><strong>07–08 Market / Revenue</strong><span>TAM 5.7조 · 기존 비용의 40% 투트랙 과금</span></div>
-<div class="cv-pill"><strong>09–11 Traction / Team / Financials</strong><span>5개년 로드맵 · 22년 전장 노하우 · J커브</span></div>
-</div>
-</div>
+  <div class="cv">
+    <div class="cv-l">
+      <div class="cv-tag">2026 · PCBeaver · IR Pitch Deck v2</div>
+      <h1>PCB 설계,<br/><em>딸깍 한 번</em>으로.</h1>
+      <p class="cv-desc">인하우스 설계팀과 디자인 하우스의 반복 재작업·외주 병목을<br/>AX 내재화 및 AI 설계 엔진으로 대체합니다.</p>
+      <div class="cv-nums">
+        <div class="cv-num"><strong class="c-bl">90%+</strong><span>시간 단축</span></div>
+        <div class="cv-num"><strong class="c-mn">60%+</strong><span>비용 절감</span></div>
+        <div class="cv-num"><strong class="c-am">400억</strong><span>목표 연매출</span></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- 01 PROBLEM -->
+<!-- ══ 01 PROBLEM ══ -->
 <div class="slide" id="s1">
-<div class="aln" style="background:linear-gradient(90deg,var(--rose),transparent)"></div>
-<div class="sh"><span class="sn">01 / 11</span><span class="st">Problem</span><span class="sr">우리가 해결하고자 하는 고객의 문제는 무엇인가?</span></div>
-<div class="sb">
-<div class="hook hook-r">"왜 PCB 설계는 여전히 100% 수작업인가? — 시간, 비용, 품질의 구조적 <span class="c-ro">트릴레마(Trilemma)</span>"</div>
-<div class="divl" style="margin-bottom:6px">① 수작업에 의존할 수밖에 없는 초고난도 설계 영역</div>
-<div class="g3" style="margin-bottom:8px">
-<div class="card"><h3>복합적 물리 특성 통제</h3><p>전류 흐름·EMI·발열 등 보드 위의 물리 현상을 동시에 계산하고 제어해야 한다.</p></div>
-<div class="card"><h3>절대적 경험 의존도</h3><p>정해진 정답이 없으며, 고객사별 맞춤형 디자인 룰을 만족하려면 숙련 엔지니어의 직관이 필수다.</p></div>
-<div class="card"><h3>파편화된 도메인 기준</h3><p>전장(자동차)부터 가전·산업기기까지 분야마다 설계 기준과 Constraints가 완전히 다르다.</p></div>
-</div>
-<div class="divl" style="margin-bottom:6px">② 진퇴양난에 빠진 산업 — In-house vs Outsourcing 딜레마</div>
-<div class="tw" style="margin-bottom:8px">
-<table>
-<thead><tr><th>선택지</th><th>표면적 이점</th><th>실제 대가</th></tr></thead>
-<tbody>
-<tr><td><strong style="color:#7ab5ff">In-house (직접 설계)</strong></td><td>외주 비용 절감 + 설계 통제권 확보</td><td>막대한 설계 시간 투입 → 타임 투 마켓 준수 어려움</td></tr>
-<tr><td><strong style="color:#f5c066">Outsourcing (외주 설계)</strong></td><td>개발 시간 확보 + 단기 CAPA 보완</td><td>높은 용역비 + 업체 실력 편차 → 내부 재검증 필수, CAPA 부족 시 무기한 지연</td></tr>
-</tbody>
-</table>
-</div>
-<div class="divl" style="margin-bottom:6px">③ 무한 수정의 늪과 치명적인 리스크</div>
-<div class="g2" style="margin-bottom:8px">
-<div class="card cr"><h3>처음부터 다시 돌아가는 무한 루프</h3><p>ECO 발생·DR 미달·설계 가이드 미충족 시 수많은 배선을 처음부터 수작업. 평균 <strong>설계 30시간/건, ECO 10회/프로젝트</strong> 반복.</p></div>
-<div class="card cr"><h3>휴먼 에러 폭탄</h3><p>반복되는 수정-검증 루프는 필연적으로 휴먼 에러를 유발. 양산 시 <strong>필드 불량 → 막대한 리콜 비용</strong>으로 직결.</p></div>
-</div>
-<span class="ph">시간↓→비용↑ · 비용↓→일정 지연 · 품질↑→다시 사람 검증 — 구조적 트릴레마, PCBeaver가 동시에 해결</span>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--rose),transparent)"></div>
+  <div class="sh">
+    <span class="sn">01 / 06</span><span class="st">Problem</span>
+    <span class="sr">우리가 해결하고자 하는 고객의 문제는 무엇인가?</span>
+  </div>
+  <div class="sb">
+    <!-- Headline -->
+    <div style="padding:10px 15px;border-left:3px solid var(--rose);background:rgba(240,64,96,.07);border-radius:0 9px 9px 0;font-size:.91rem;font-weight:800;line-height:1.42;color:#fff;margin-bottom:11px">
+      "왜 PCB 설계는 여전히 100% 수작업인가? — 시간, 비용, 품질의 구조적 <span class="c-ro">트릴레마(Trilemma)</span>"
+    </div>
+
+    <!-- ① Why hard -->
+    <div class="divl" style="margin-bottom:7px">① 수작업에 의존할 수밖에 없는 초고난도 설계 영역</div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="card">
+        <h3>복합적 물리 특성 통제</h3>
+        <p>전류 흐름·EMI(전자파 간섭·노이즈)·발열 등 보드 위의 물리 현상을 동시에 계산하고 제어해야 한다.</p>
+      </div>
+      <div class="card">
+        <h3>절대적 경험 의존도</h3>
+        <p>정해진 정답이 없으며, 고객사별 맞춤형 디자인 룰을 만족하려면 숙련 엔지니어의 직관과 경험치가 필수다.</p>
+      </div>
+      <div class="card">
+        <h3>파편화된 도메인 기준</h3>
+        <p>전장(자동차)부터 가전·산업기기까지 분야마다 설계 기준과 Constraints가 완전히 다르다.</p>
+      </div>
+    </div>
+
+    <!-- ② Trade-off -->
+    <div class="divl" style="margin-bottom:7px">② 진퇴양난에 빠진 산업의 현실 — In-house vs Outsourcing</div>
+    <div class="tw" style="margin-bottom:10px">
+      <table>
+        <thead><tr><th>선택지</th><th>표면적 이점</th><th>실제 대가</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#7ab5ff">In-house (직접 설계)</strong></td>
+            <td>외주 비용 절감 + 설계 통제권 확보</td>
+            <td>막대한 설계 시간 투입 → 타임 투 마켓 준수 어려움</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#f5c066">Outsourcing (외주 설계)</strong></td>
+            <td>개발 시간 확보 + 단기 CAPA 보완</td>
+            <td>높은 용역비 + 업체 실력 편차 → 내부 재검증 필수, CAPA 부족 시 무기한 지연</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ③ Breaking Point -->
+    <div class="divl" style="margin-bottom:7px">③ 무한 수정의 늪과 치명적인 리스크</div>
+    <div class="g2 fl">
+      <div class="card cr">
+        <h3>처음부터 다시 돌아가는 무한 루프</h3>
+        <p>ECO 발생·DR 미달·설계 가이드 미충족 시 수많은 배선을 처음부터 수작업. 평균 <strong>+10주</strong> 추가 지연이 반복된다.</p>
+      </div>
+      <div class="card cr">
+        <h3>휴먼 에러 폭탄</h3>
+        <p>반복되는 수정-검증 루프는 필연적으로 휴먼 에러를 유발. 양산 시 <strong>필드 불량 → 막대한 리콜 비용</strong>으로 직결.</p>
+      </div>
+    </div>
+
+    <span class="ph">시간↓→비용↑ · 비용↓→일정 지연 · 품질↑→다시 사람 검증 — 구조적 트릴레마, PCBeaver가 동시에 해결</span>
+  </div>
 </div>
 
-<!-- 02 SOLUTION -->
+<!-- ══ 02 SOLUTION ══ -->
 <div class="slide" id="s2">
-<div class="aln" style="background:linear-gradient(90deg,var(--mint),transparent)"></div>
-<div class="sh"><span class="sn">02 / 11</span><span class="st">Solution</span><span class="sr">고객이 우리 제품을 선택하는 이유는 무엇인가?</span></div>
-<div class="sb">
-<div class="hook">"단 한 번의 '딸깍'으로 검증과 재작업이 필요 없는 완성형 PCB를 가장 빠르고 저렴하게."</div>
-<div class="divl" style="margin-bottom:7px">고객이 PCBeaver를 선택하는 3가지 이유</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card cb"><h3>① 시간 경쟁력</h3><div class="stat c-bl">90%</div><p class="sl">리드타임 단축. 30시간 → 3시간. 설계 일정 병목 해소.</p></div>
-<div class="card cm"><h3>② 원가 경쟁력</h3><div class="stat c-mn">60%</div><p class="sl">기존 외주 단가 대비 절감. 7.75억 → 3억 (실증 데이터).</p></div>
-<div class="card ca"><h3>③ 완성도 경쟁력</h3><div class="stat-s c-am">1-Pass</div><p class="sl">필드 불량 리스크 최소화. 고신뢰성 설계를 처음부터 제공.</p></div>
-</div>
-<div class="divl" style="margin-bottom:7px">어떻게 가치를 전달하는가</div>
-<div class="flow">
-<div class="fs" style="border-color:rgba(29,111,232,.32);background:rgba(29,111,232,.07)"><div class="ft">Input</div><div class="ftt">Netlist + DXF</div><div class="fd">기존 외주와 동일한 입력 방식 — 새로운 툴 학습 불필요</div></div>
-<div class="fa">›</div>
-<div class="fs" style="border-color:rgba(139,92,246,.32);background:rgba(139,92,246,.07)"><div class="ft">AI Engine</div><div class="ftt">고객사 룰 선제 적용</div><div class="fd">Design Rule을 Hard Constraint로 내재화 → 사후 재검증 최소화</div></div>
-<div class="fa">›</div>
-<div class="fs" style="border-color:rgba(0,200,150,.32);background:rgba(0,200,150,.07)"><div class="ft">Output</div><div class="ftt">완성형 PCB 산출물</div><div class="fd">ECO 발생 시에도 재입력만으로 신속 재산출 가능</div></div>
-</div>
-<div class="g2">
-<div class="card"><h3>Zero Learning Cost</h3><p>기존 외주 프로세스와 동일한 입력 방식. 새로운 워크플로우 학습 없이 즉시 도입 가능. 고객사 맞춤 룰도 선제 반영.</p></div>
-<div class="card cm"><h3>ECO 즉시 대응</h3><p>기구 외곽선 변경·OEM 요구 수정 시 <strong>재입력만으로 신속 재산출</strong>. 기존 외주의 평균 +10주 대기 병목을 제거.</p></div>
-</div>
-<span class="ph" style="margin-top:8px">도입 장벽이 낮고 경제성이 분명하다 — 구매 결정의 핵심 두 가지를 동시에 충족</span>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--mint),transparent)"></div>
+  <div class="sh">
+    <span class="sn">02 / 06</span><span class="st">Solution</span>
+    <span class="sr">고객이 우리 제품을 선택하는 이유는 무엇인가?</span>
+  </div>
+  <div class="sb">
+    <div class="ttl">핵심 가치 제안</div>
+    <div class="hook">"단 한 번의 '딸깍'으로 검증과 재작업이 필요 없는 완성형 PCB를 가장 빠르고 저렴하게."</div>
+    <div class="divl">고객이 PCBeaver를 선택하는 3가지 이유</div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="card cb">
+        <h3>① 시간 경쟁력</h3>
+        <div class="stat c-bl">90%+</div>
+        <p class="sl">리드타임 단축. 설계 일정의 병목을 해소한다.</p>
+      </div>
+      <div class="card cm">
+        <h3>② 원가 경쟁력</h3>
+        <div class="stat c-mn">60%+</div>
+        <p class="sl">기존 외주 단가 대비 절감. 예산 효율이 눈에 보인다.</p>
+      </div>
+      <div class="card ca">
+        <h3>③ 완성도 경쟁력</h3>
+        <div class="stat-s c-am">1-Pass</div>
+        <p class="sl">필드 불량 리스크 최소화. 고신뢰성 설계를 제공한다.</p>
+      </div>
+    </div>
+    <div class="divl">어떻게 가치를 전달하는가</div>
+    <div class="flow">
+      <div class="fs" style="border-color:rgba(29,111,232,.32);background:rgba(29,111,232,.07)">
+        <div class="ft">Input</div><div class="ftt">Netlist + DXF</div>
+        <div class="fd">기존 외주와 동일한 입력 방식 — 새로운 툴 학습 불필요</div>
+      </div>
+      <div class="fa">›</div>
+      <div class="fs" style="border-color:rgba(139,92,246,.32);background:rgba(139,92,246,.07)">
+        <div class="ft">AI Engine</div><div class="ftt">고객사 룰 선제 적용</div>
+        <div class="fd">Design Rule을 Hard Constraint로 내재화해 사후 재검증 최소화</div>
+      </div>
+      <div class="fa">›</div>
+      <div class="fs" style="border-color:rgba(0,200,150,.32);background:rgba(0,200,150,.07)">
+        <div class="ft">Output</div><div class="ftt">완성형 PCB 산출물</div>
+        <div class="fd">ECO 발생 시에도 재입력만으로 신속 재산출 가능</div>
+      </div>
+    </div>
+    <div class="g2 fl">
+      <div class="card">
+        <h3>도입 장벽 최소화</h3>
+        <p>기존 외주 프로세스와 동일한 입력 방식 유지. 새로운 워크플로우 학습 없이 즉시 적용 가능. 고객사 맞춤 룰도 선제 반영.</p>
+      </div>
+      <div class="card cm">
+        <h3>ECO 즉시 대응</h3>
+        <p>기구 외곽선 변경·OEM 요구 수정 시 <strong>재입력만으로 신속 재산출</strong>. 기존 외주의 평균 +10주 대기 병목을 제거.</p>
+      </div>
+    </div>
+    <span class="ph" style="margin-top:10px">도입 장벽이 낮고 경제성이 분명하다 — 구매 결정의 핵심 두 가지를 동시에 충족</span>
+  </div>
 </div>
 
-<!-- 03 PRODUCT -->
+<!-- ══ 03 PRODUCT ══ -->
 <div class="slide" id="s3">
-<div class="aln" style="background:linear-gradient(90deg,var(--purple),transparent)"></div>
-<div class="sh"><span class="sn">03 / 11</span><span class="st">Product</span><span class="sr">제품은 무엇이며, 어떻게 가치를 제공하는가?</span></div>
-<div class="sb">
-<div class="ttl">AI PCB Engineering Platform</div>
-<p class="sub">현대차그룹의 양산 설계 노하우와 글로벌 OEM 기준을 학습 — 회로도 입력만으로 양산 가능한 PCB를 자동 생성</p>
-<div class="divl" style="margin-bottom:7px">sLLM MCP 기반 하이브리드 3단계 설계 구조</div>
-<div class="arch" style="margin-bottom:9px">
-<div class="arch-step" style="border-color:rgba(29,111,232,.35);background:rgba(29,111,232,.08)"><div class="arch-num" style="color:var(--blue)">1단계 · sLLM</div><div class="arch-title">1차 배치 및 배선</div><div class="arch-desc">MCP 기반 언어모델로 초기 배치·배선 수행. 좌표 기반 강화학습의 구조적 한계를 극복.</div></div>
-<div class="arch-arr">›</div>
-<div class="arch-step" style="border-color:rgba(139,92,246,.35);background:rgba(139,92,246,.08)"><div class="arch-num" style="color:var(--purple)">2단계 · Backend Solver</div><div class="arch-title">설계 최적화</div><div class="arch-desc">전기·물리·열 특성을 반영한 설계 제약 최적화. 고객사별 DRC를 Hard Constraint로 처리.</div></div>
-<div class="arch-arr">›</div>
-<div class="arch-step" style="border-color:rgba(0,200,150,.35);background:rgba(0,200,150,.08)"><div class="arch-num" style="color:var(--mint)">3단계 · Validator</div><div class="arch-title">최종 설계 검증</div><div class="arch-desc">양산 기준 검증 통과 확인. 1-Pass 목표로 사후 재검증 부담을 대폭 축소.</div></div>
-</div>
-<div class="divl" style="margin-bottom:7px">성능의 원천 — 3가지 차별화 요소</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card"><h3>① 실무 노하우 이식</h3><p>현대차그룹 HW 설계자의 실무 의사결정 과정을 AI 모델에 직접 반영. 범용 AI로는 학습 불가능한 도메인 지식.</p></div>
-<div class="card"><h3>② Design Rule 내재화</h3><p>글로벌 OEM의 엄격한 설계 룰을 Hard Constraint로 선제 적용. 사후 재검증·수정 프로세스를 최소화.</p></div>
-<div class="card"><h3>③ 양산 데이터 지속 학습</h3><p>실제 양산 설계 데이터를 지속적으로 학습해 설계 정확도와 신뢰성을 계속 고도화.</p></div>
-</div>
-<div class="g2">
-<div class="card cp"><h3>Data Moat</h3><p>사내벤처로서 아이템별 특화 <strong>양산 데이터셋에 직접 접근 가능</strong>. 외부 경쟁사가 동등 데이터를 확보하려면 수 년이 소요.</p></div>
-<div class="card cg"><h3>Domain Moat</h3><p><strong>10년+ 전장품 양산 설계 실무 경험</strong>과 AI 기술력의 결합. 범용 AI·일반 경쟁사가 단기간에 복제 불가.</p></div>
-</div>
-<span class="ph" style="margin-top:8px">지원 EDA 툴: Zuken · Altium · Cadence · PADS — 모든 EDA 툴에서 동작 (범용성 우위)</span>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--purple),transparent)"></div>
+  <div class="sh">
+    <span class="sn">03 / 06</span><span class="st">Product</span>
+    <span class="sr">제품은 무엇이며, 어떻게 가치를 제공하는가?</span>
+  </div>
+  <div class="sb">
+    <div class="ttl">AI PCB Engineering Platform</div>
+    <p class="sub">현대차그룹의 양산 설계 노하우와 글로벌 OEM 기준을 학습 — 회로도 입력만으로 양산 가능한 PCB를 자동 생성</p>
+    <div class="divl">3단계 하이브리드 설계 구조 (sLLM MCP 기반)</div>
+    <div class="arch" style="margin-bottom:12px">
+      <div class="arch-step" style="border-color:rgba(29,111,232,.35);background:rgba(29,111,232,.08)">
+        <div class="arch-num" style="color:var(--blue)">1단계 · sLLM</div>
+        <div class="arch-title">1차 배치 및 배선</div>
+        <div class="arch-desc">MCP 기반 언어모델로 초기 배치·배선 수행. 좌표 기반 강화학습의 구조적 한계를 극복.</div>
+      </div>
+      <div class="arch-arr">›</div>
+      <div class="arch-step" style="border-color:rgba(139,92,246,.35);background:rgba(139,92,246,.08)">
+        <div class="arch-num" style="color:var(--purple)">2단계 · Backend Solver</div>
+        <div class="arch-title">설계 최적화</div>
+        <div class="arch-desc">전기·물리·열 특성을 반영한 설계 제약 최적화. 고객사별 DRC를 Hard Constraint로 처리.</div>
+      </div>
+      <div class="arch-arr">›</div>
+      <div class="arch-step" style="border-color:rgba(0,200,150,.35);background:rgba(0,200,150,.08)">
+        <div class="arch-num" style="color:var(--mint)">3단계 · Validator</div>
+        <div class="arch-title">최종 설계 검증</div>
+        <div class="arch-desc">양산 기준 검증 통과 확인. 1-Pass 목표로 사후 재검증 부담을 대폭 축소.</div>
+      </div>
+    </div>
+    <div class="divl">성능의 원천 — 3가지 차별화 요소</div>
+    <div class="g3" style="margin-bottom:12px">
+      <div class="card">
+        <h3>① 실무 노하우 이식</h3>
+        <p>현대차그룹 HW 설계자의 실무 의사결정 과정을 AI 모델에 직접 반영. 범용 AI로는 학습 불가능한 도메인 지식.</p>
+      </div>
+      <div class="card">
+        <h3>② Design Rule 내재화</h3>
+        <p>글로벌 OEM의 엄격한 설계 룰을 Hard Constraint로 선제 적용. 사후 재검증·수정 프로세스를 최소화.</p>
+      </div>
+      <div class="card">
+        <h3>③ 양산 데이터 지속 학습</h3>
+        <p>실제 양산 설계 데이터를 지속적으로 학습해 설계 정확도와 신뢰성을 계속 고도화.</p>
+      </div>
+    </div>
+    <div class="g2 fl">
+      <div class="card cp">
+        <h3>Data Moat</h3>
+        <p>사내벤처로서 아이템별 특화 <strong>양산 데이터셋에 직접 접근 가능</strong>. 외부 경쟁사가 동등 데이터를 확보하려면 수 년이 소요.</p>
+      </div>
+      <div class="card cg">
+        <h3>Domain Moat</h3>
+        <p><strong>10년+ 전장품 양산 설계 실무 경험</strong>과 AI 기술력의 결합. 범용 AI·일반 경쟁사가 단기간에 복제 불가.</p>
+      </div>
+    </div>
+    <span class="ph" style="margin-top:10px">플랫폼 구조(3단계)와 성능이 나오는 이유(Data + Domain Moat)를 분리해 설명할 것</span>
+  </div>
 </div>
 
-<!-- 04 STRATEGIC VALUE -->
+<!-- ══ 04 현대차그룹 기업가치 제고 ══ -->
 <div class="slide" id="s4">
-<div class="aln" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
-<div class="sh"><span class="sn">04 / 11</span><span class="st">Strategic Value</span><span class="sr">PCBeaver는 현대차그룹 기업가치에 어떤 전략적 가치를 제공하는가?</span></div>
-<div class="sb">
-<div class="hook hook-g">"지금까지 사람과 외주에 분산돼 있던 PCB 설계 역량을, 현대차그룹이 직접 보유하는 <span class="c-gd">설계 엔진</span>으로 전환합니다."</div>
-<div class="divl" style="margin-bottom:7px">Current Pain — 그룹이 지금 얼마나 아픈가</div>
-<div class="tw" style="margin-bottom:9px">
-<table>
-<thead><tr><th>항목</th><th>현재 구조적 부담</th></tr></thead>
-<tbody>
-<tr><td><strong>외주 비용</strong></td><td>대상 조직 기준 연간 PCB 설계 외주비 <strong class="c-ro">120억 원</strong></td></tr>
-<tr><td><strong>개발 일정</strong></td><td>평균 설계 리드타임 30시간/건, 프로젝트당 ECO 평균 10회 발생</td></tr>
-<tr><td><strong>품질 비용</strong></td><td>전장 품질 이슈 및 재작업 발생 시 비용 부담 확대</td></tr>
-<tr><td><strong>인력 의존</strong></td><td>핵심 설계자 이탈 시 설계 기준과 경험이 함께 유실</td></tr>
-</tbody>
-</table>
-</div>
-<div class="divl" style="margin-bottom:7px">그룹 차원의 4대 기대 효과</div>
-<div class="g4" style="margin-bottom:9px">
-<div class="card cb" style="text-align:center"><h3>개발 일정 가속</h3><div class="stat c-bl" style="text-align:center">90%</div><p class="sl" style="text-align:center">리드타임 단축<br/>30h → 3h</p></div>
-<div class="card cm" style="text-align:center"><h3>R&amp;D 비용 절감</h3><div class="stat c-mn" style="text-align:center">72억</div><p class="sl" style="text-align:center">외주비 120억 중<br/>최대 절감</p></div>
-<div class="card cr" style="text-align:center"><h3>품질 리스크 완화</h3><div class="stat-s c-ro" style="text-align:center">1-Pass</div><p class="sl" style="text-align:center">재작업·필드 불량<br/>위험 완화</p></div>
-<div class="card cg" style="text-align:center"><h3>설계 자산 내재화</h3><div class="stat-s c-gd" style="text-align:center">영구</div><p class="sl" style="text-align:center">암묵지 → 그룹<br/>디지털 자산</p></div>
-</div>
-<div class="divl" style="margin-bottom:7px">왜 외부 구매가 아닌 내재화인가</div>
-<div class="tw">
-<table>
-<thead><tr><th>항목</th><th>외부 솔루션 구매</th><th>PCBeaver 내재화</th></tr></thead>
-<tbody>
-<tr><td>현대차 설계 룰 반영</td><td>범용 기준 중심 — 맞춤 적용 불가</td><td class="c-mn">그룹·글로벌 OEM 기준 Hard Constraint 내재화</td></tr>
-<tr><td>데이터 통제</td><td>외부 벤더 의존, 내부 데이터 유출 위험</td><td class="c-mn">내부 데이터 완전 통제 및 지속 학습</td></tr>
-<tr><td>비용 구조</td><td>라이선스 비용 지속 발생</td><td class="c-mn">일회 투자 후 내부 자산으로 영구 축적</td></tr>
-</tbody>
-</table>
-</div>
-<span class="ph" style="margin-top:8px">리콜 1건 예방만으로 투자비 회수 — PCBeaver는 비용 절감 툴이 아닌 그룹 전략 자산</span>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
+  <div class="sh">
+    <span class="sn">04 / 06</span><span class="st">Strategic Value</span>
+    <span class="sr">PCBeaver는 현대차그룹 전체의 기업가치에 어떤 전략적 가치를 제공하는가?</span>
+  </div>
+  <div class="sb">
+    <div class="ttl">현대차그룹 기업가치 제고</div>
+    <div style="padding:10px 15px;border-left:3px solid var(--gold);background:rgba(232,200,74,.07);border-radius:0 9px 9px 0;font-size:.89rem;font-weight:700;line-height:1.42;color:#fff;margin-bottom:11px">
+      설계자 개개인의 머릿속에 파편화된 노하우를 <span class="c-gd"><strong>영구적인 디지털 자산(Digital Asset)</strong></span>으로 내재화 — 인력 이탈·외주 의존에 흔들리지 않는 기술적 해자를 완성합니다.
+    </div>
+
+    <div class="divl" style="margin-bottom:8px">그룹 차원의 4대 전략 가치 (Pillars)</div>
+    <div class="g2" style="margin-bottom:10px">
+      <div class="card cb">
+        <h3>신차 출시 가속화</h3>
+        <div class="stat c-bl" style="margin-bottom:5px">90%</div>
+        <p class="sl">설계 리드타임 단축으로 신차 및 핵심 전장 부품의<br/>Time-to-Market을 직접 가속한다.</p>
+      </div>
+      <div class="card cm">
+        <h3>R&amp;D 이익률 개선</h3>
+        <div class="stat c-mn" style="margin-bottom:5px">60%+</div>
+        <p class="sl">외주 단가 절감으로 그룹 차원의 전장<br/>R&amp;D 고정비를 직접 낮춘다.</p>
+      </div>
+    </div>
+    <div class="g2" style="margin-bottom:11px">
+      <div class="card cr">
+        <h3>리콜 리스크 최소화</h3>
+        <p>필드 불량 가능성을 줄인 무결점 설계 데이터로 <strong>품질 비용과 대규모 리콜 리스크</strong>를 완화한다.</p>
+      </div>
+      <div class="card cg">
+        <h3>설계 노하우 디지털 자산화</h3>
+        <p>암묵지를 엔진에 내재화해 <strong>인력 이탈·외주 의존에 흔들리지 않는</strong> 영구적 내부 기술 해자를 확보한다.</p>
+      </div>
+    </div>
+
+    <div class="divl" style="margin-bottom:8px">왜 지금 이 투자가 필요한가</div>
+    <div class="g2 fl">
+      <div class="card">
+        <h3>단기 효과 (즉각적)</h3>
+        <p>R&amp;D 비용 절감 + 설계 일정 단축 → 타임 투 마켓 경쟁 우위 확보. 비용 절감 효과는 첫 해부터 가시적으로 발생.</p>
+      </div>
+      <div class="card cg">
+        <h3>장기 자산 (영구적)</h3>
+        <p>그룹 고유의 양산 설계 지식을 AI 엔진으로 완전히 내재화 → 외부 AI·경쟁사가 복제 불가능한 영구적 기술 해자.</p>
+      </div>
+    </div>
+    <span class="ph" style="margin-top:10px">임원 관점: [신차 가속] [R&amp;D 절감] [리콜 완화] [디지털 자산화] — 4개 기둥을 클로징 메시지로 제시</span>
+  </div>
 </div>
 
-<!-- 05 GO TO MARKET -->
+<!-- ══ 05 GO TO MARKET ══ -->
 <div class="slide" id="s5">
-<div class="aln" style="background:linear-gradient(90deg,var(--blue),var(--mint))"></div>
-<div class="sh"><span class="sn">05 / 11</span><span class="st">Go To Market</span><span class="sr">어떻게 첫 고객을 확보하고, 반복 매출 구조로 전환할 것인가?</span></div>
-<div class="sb">
-<div class="hook hook-b">"가장 시급한 일정 병목 팀부터 시작해, 검증된 절감 데이터를 바탕으로 조직 단위 계약으로 확장합니다."</div>
-<div class="divl" style="margin-bottom:7px">4단계 침투 전략 — Land and Expand</div>
-<div class="tw" style="margin-bottom:9px">
-<table>
-<thead><tr><th>단계</th><th>시기</th><th>타깃</th><th>접근 방식</th><th>정량 목표</th></tr></thead>
-<tbody>
-<tr><td><span class="bdg bdg-b">STEP 1</span></td><td>2027 H1</td><td>계열사 병목 설계팀</td><td>기존 디자인 하우스와 병행 가능한 무료 PoC</td><td>3팀 PoC 성공 기준 달성</td></tr>
-<tr><td><span class="bdg bdg-m">STEP 2</span></td><td>2027 H2</td><td>조직장 / 예산 운영팀</td><td>실측 ROI 기반 계약 전환</td><td class="c-mn"><strong>ARR 6억</strong> (2팀 × 3억)</td></tr>
-<tr><td><span class="bdg bdg-a">STEP 3</span></td><td>2028 H1</td><td>계열사 / 1·2차 협력사</td><td>Rule Pack 온보딩으로 확장</td><td class="c-am"><strong>ARR 24억</strong> (누적 8팀)</td></tr>
-<tr><td><span class="bdg bdg-r">STEP 4</span></td><td>2028 H2</td><td>방산·전동차 신규 버티컬</td><td>전장 레퍼런스 기반 도메인 확장</td><td>신규 도메인 유효성 검증</td></tr>
-</tbody>
-</table>
-</div>
-<div class="divl" style="margin-bottom:7px">PoC 성공 기준 (STEP 1 세부)</div>
-<div class="g4" style="margin-bottom:9px">
-<div class="card cb"><h3>리드타임 단축</h3><div class="stat-s c-bl">90%+</div><p class="sl">설계 속도</p></div>
-<div class="card cm"><h3>ECO 대응</h3><div class="stat-s c-mn">70%+</div><p class="sl">대응 시간 개선</p></div>
-<div class="card ca"><h3>재작업 감소</h3><div class="stat-s c-am">50%+</div><p class="sl">재작업 횟수</p></div>
-<div class="card cp"><h3>유료 전환</h3><div class="stat-s c-pu">2/3팀</div><p class="sl">전환 의향 확보</p></div>
-</div>
-<div class="g2">
-<div class="card"><h3>Low-friction Entry</h3><p>기존 외주 방식과 동일한 입력(Netlist+DXF). 기존 디자인 하우스와 병행 가능 → 도입 저항 제로.</p></div>
-<div class="card cm"><h3>Productized Expansion</h3><p>공통 엔진은 유지하고 고객별 <strong>Rule Pack</strong>만 반영해 확장. 확장 원가를 낮추고 Lock-in 효과를 높임.</p></div>
-</div>
-<span class="ph" style="margin-top:8px">한 팀의 성공 → 조직 단위 계약 → 계열사 확장 → 신규 버티컬 — 단계별 수익 확장 구조</span>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--blue),var(--mint))"></div>
+  <div class="sh">
+    <span class="sn">05 / 06</span><span class="st">Go To Market</span>
+    <span class="sr">어떻게 시장에 진입하여 고객을 획득할 것인가?</span>
+  </div>
+  <div class="sb">
+    <p class="sub" style="margin-bottom:10px">병목을 겪는 실무진 → 예산 의사결정자 → 신규 고객사 Lock-in의 3단계 Bottom-up 침투 전략</p>
+
+    <div class="divl" style="margin-bottom:8px">3단계 침투 전략</div>
+    <div class="g3 fl" style="margin-bottom:0">
+      <div class="card cb" style="display:flex;flex-direction:column;gap:5px">
+        <div style="font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--blue)">STEP 1 · 2027 H2</div>
+        <div style="font-size:.9rem;font-weight:800">실무진 무료 PoC</div>
+        <p style="font-size:.79rem;line-height:1.54;color:rgba(240,244,255,.82)">외주 CAPA 부족·일정 압박 핵심 설계팀 3개+에 무료 파일럿 제공. 기존 디자인 하우스 의뢰와 병행 가능 구조.</p>
+        <div style="font-size:.71rem;color:var(--muted);margin-top:auto;padding-top:6px;border-top:1px solid var(--line)">목표: 절감 실측 데이터 확보 + 유료 전환 가능성 검증</div>
+      </div>
+      <div class="card cm" style="display:flex;flex-direction:column;gap:5px">
+        <div style="font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--mint)">STEP 2 · 2028 H1</div>
+        <div style="font-size:.9rem;font-weight:800">조직장·예산 확보</div>
+        <p style="font-size:.79rem;line-height:1.54;color:rgba(240,244,255,.82)">기존 외주 대비 60% 절감 + 팀당 연 3억 원 예산 대체 스토리로 의사결정자 설득. 외주 예산의 연간 계약형 전환.</p>
+        <div style="font-size:.71rem;color:var(--muted);margin-top:auto;padding-top:6px;border-top:1px solid var(--line)">목표: 외주 예산의 연간 계약형 전환</div>
+      </div>
+      <div class="card cp" style="display:flex;flex-direction:column;gap:5px">
+        <div style="font-size:.58rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--purple)">STEP 3 · 확장</div>
+        <div style="font-size:.9rem;font-weight:800">데이터 Lock-in</div>
+        <p style="font-size:.79rem;line-height:1.54;color:rgba(240,244,255,.82)">신규 고객사에 1개월 무료 온보딩 제공. 고객사 고유 설계 데이터 맞춤 학습 후 유료 전환으로 전환 비용 증가.</p>
+        <div style="font-size:.71rem;color:var(--muted);margin-top:auto;padding-top:6px;border-top:1px solid var(--line)">목표: 전환 비용 증가 + 장기 계약 유지</div>
+      </div>
+    </div>
+
+    <div class="divl" style="margin-bottom:7px">단계별 요약</div>
+    <div class="tw" style="margin-bottom:10px">
+      <table>
+        <thead><tr><th>단계</th><th>시기</th><th>타깃</th><th>접근 방식</th><th>핵심 성과</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#7ab5ff">1단계</strong></td><td>2027 H2</td><td>병목 겪는 실무 엔지니어</td><td>무료 PoC 트랙</td><td>절감 데이터 실증</td></tr>
+          <tr><td><strong style="color:#00dba7">2단계</strong></td><td>2028 H1</td><td>조직장 / 예산 운영팀</td><td>60% 절감 논리로 계약</td><td>연 3억 예산 대체</td></tr>
+          <tr><td><strong style="color:#b08af5">3단계</strong></td><td>확장</td><td>신규 고객사</td><td>맞춤 학습 후 유료 전환</td><td>고객별 Lock-in</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card cm">
+      <h3>확장 경로</h3>
+      <p>거점 고객 확보 → <strong>2차 협력사</strong> → <strong>그룹 내 추가 사업부</strong> → <strong>글로벌 OEM 공급망</strong>으로 순차 확산.</p>
+    </div>
+    <span class="ph" style="margin-top:10px">실무 체감 → 예산 설득 → 데이터 Lock-in — Bottom-up 침투가 가장 빠른 시장 진입 경로</span>
+  </div>
 </div>
 
-<!-- 06 COMPETITION -->
+<!-- ══ 06 COMPETITION ══ -->
 <div class="slide" id="s6">
-<div class="aln" style="background:linear-gradient(90deg,var(--rose),var(--purple))"></div>
-<div class="sh"><span class="sn">06 / 11</span><span class="st">Competition</span><span class="sr">시장 내 경쟁자는 누가 있으며, 우리의 경쟁우위는 무엇인가?</span></div>
-<div class="sb">
-<div class="hook hook-r">"현재 대안은 수작업과 외주, 미래 경쟁은 범용 AI와 EDA입니다. PCBeaver는 <span class="c-mn">Rule Pack + Validator</span>로 이 간극을 메웁니다."</div>
-<div class="divl" style="margin-bottom:7px">① 현재 경쟁자 대비 PCBeaver 수치 우위</div>
-<div class="g4" style="margin-bottom:9px">
-<div class="card cb"><h3>설계 시간</h3><div class="stat c-bl" style="font-size:1.6rem">90%</div><p class="sl">더 빠른 리드타임</p></div>
-<div class="card cm"><h3>설계 비용</h3><div class="stat c-mn" style="font-size:1.6rem">60%</div><p class="sl">외주 대비 절감</p></div>
-<div class="card ca"><h3>품질 편차</h3><div class="stat-s c-am">Zero</div><p class="sl">인적 역량 의존 제거</p></div>
-<div class="card cp"><h3>ECO 대응</h3><div class="stat-s c-pu">즉시</div><p class="sl">재입력만으로 재산출</p></div>
-</div>
-<div class="divl" style="margin-bottom:7px">② 잠재 경쟁자 — 글로벌 AI·EDA 기업 대비 PCBeaver 해자</div>
-<div class="tw" style="margin-bottom:9px">
-<table>
-<thead><tr><th>경쟁사</th><th>특징</th><th>구조적 한계</th><th>PCBeaver 차별점</th></tr></thead>
-<tbody>
-<tr><td><strong>Celus</strong></td><td>컴포넌트 자동 배치, 유럽 중심</td><td>전장 특화 Design Rule 없음, 양산 데이터 부재</td><td rowspan="2" class="c-mn">Rule Pack + Validator + 도메인 특화 구조</td></tr>
-<tr><td><strong>Flux.ai</strong></td><td>클라우드 AI 설계 보조</td><td>자동완성 수준 — 완전 자동화 미지원</td></tr>
-<tr><td><strong>Cadence / Zuken AI</strong></td><td>EDA 내 AI 기능 추가</td><td>범용 환경, 고객사별 룰 내재화 불가</td><td class="c-mn">양산 적용 전제 결과 중심 접근</td></tr>
-</tbody>
-</table>
-</div>
-<div class="divl" style="margin-bottom:7px">③ PCBeaver 핵심 차별점 4가지</div>
-<div class="g4">
-<div class="card cb"><h3>Low-friction</h3><p style="font-size:.73rem">Netlist+DXF 입력. 새 툴 학습 없이 기존 외주 방식과 동일.</p></div>
-<div class="card cm"><h3>Rule Pack</h3><p style="font-size:.73rem">고객별 Design Rule·검증 기준을 맞춤형 Rule Pack으로 반영.</p></div>
-<div class="card cp"><h3>Domain Know-how</h3><p style="font-size:.73rem">10년+ 전장 실무 경험과 AI 결합. 범용 AI가 모방 불가.</p></div>
-<div class="card cg"><h3>Validator</h3><p style="font-size:.73rem">최종 Validator로 양산 기준 충족 여부를 자동 검증.</p></div>
-</div>
-<span class="ph" style="margin-top:8px">모기업 양산 데이터 접근권 + 전장 도메인 지식 = 빅테크도 돈으로 살 수 없는 비대칭 전력</span>
-</div>
-</div>
+  <div class="aln" style="background:linear-gradient(90deg,var(--rose),var(--purple))"></div>
+  <div class="sh">
+    <span class="sn">06 / 06</span><span class="st">Competition</span>
+    <span class="sr">시장 내 경쟁자는 누가 있으며, 우리의 경쟁우위는 무엇인가?</span>
+  </div>
+  <div class="sb">
+    <div style="padding:10px 15px;border-left:3px solid var(--rose);background:rgba(240,64,96,.07);border-radius:0 9px 9px 0;font-size:.89rem;font-weight:800;line-height:1.42;color:#fff;margin-bottom:11px">
+      "대체 불가능한 도메인 전문성과 압도적 효율성 — 경쟁사가 넘볼 수 없는 <span class="c-ro">진입장벽(Moat)</span>"
+    </div>
 
-<!-- 07 MARKET SIZE -->
-<div class="slide" id="s7">
-<div class="aln" style="background:linear-gradient(90deg,var(--blue),var(--purple))"></div>
-<div class="sh"><span class="sn">07 / 11</span><span class="st">Market Size</span><span class="sr">우리의 목표 시장은 어디이며, 그 규모는 얼마나 되는가?</span></div>
-<div class="sb">
-<div class="hook hook-b">"국내 전장 거점 검증 → 국내 전 산업 인접 확장 → 글로벌 스케일업 — 단계적 시장 지배 전략"</div>
-<div class="divl" style="margin-bottom:8px">TAM / SAM / SOM — 단계별 시장 진입 구조</div>
-<div class="g3" style="margin-bottom:10px">
-<div class="card cb" style="text-align:center">
-<h3>SOM · 초기 거점</h3><div class="stat c-bl" style="font-size:1.7rem">1,500억</div>
-<p class="sl" style="text-align:center">국내 전장품 PCB 설계 시장<br/>목표 점유율 <strong class="c-bl">10%</strong> = 150억 ARR</p>
-<p style="font-size:.7rem;margin-top:6px;line-height:1.45;color:rgba(240,244,255,.65)">HMG 기술협약 기반 양산성 검증 + 확고한 레퍼런스 구축</p>
-</div>
-<div class="card cm" style="text-align:center">
-<h3>SAM · 유효 시장</h3><div class="stat c-mn" style="font-size:1.7rem">8,700억</div>
-<p class="sl" style="text-align:center">국내 전체 PCB 설계 시장<br/>목표 점유율 <strong class="c-mn">10%</strong> = 870억 ARR</p>
-<p style="font-size:.7rem;margin-top:6px;line-height:1.45;color:rgba(240,244,255,.65)">가전·산업기기·로봇·의료기기 등 인접 산업 수평 확장</p>
-</div>
-<div class="card ca" style="text-align:center">
-<h3>TAM · 전체 목표</h3><div class="stat c-am" style="font-size:1.7rem">5.7조</div>
-<p class="sl" style="text-align:center">글로벌 PCB 설계 시장<br/>목표 점유율 <strong class="c-am">2%</strong> = 1,140억 ARR</p>
-<p style="font-size:.7rem;margin-top:6px;line-height:1.45;color:rgba(240,244,255,.65)">글로벌 OEM Design Rule 특화 모델로 초격차 진출</p>
-</div>
-</div>
-<div class="divl" style="margin-bottom:7px">Bottom-Up 매출 산출 (SOM 기준)</div>
-<div class="tw" style="margin-bottom:9px">
-<table>
-<thead><tr><th>변수</th><th>값</th><th>분류</th><th>근거</th></tr></thead>
-<tbody>
-<tr><td>고객 수</td><td><strong>2,000개 사</strong></td><td><span class="bdg bdg-b">Fact</span></td><td>국내 1·2차 협력업체 기준</td></tr>
-<tr><td>침투율</td><td><strong>10%</strong> (200개 사)</td><td><span class="bdg bdg-a">Assumption</span></td><td>프리미엄 자동화 솔루션 수용도 추정</td></tr>
-<tr><td>객단가 (구독)</td><td><strong>3.2억 원/사</strong></td><td><span class="bdg bdg-r">Hypothesis</span></td><td>기존 외주비 8억의 40% 수준</td></tr>
-<tr><td>연간 성장률</td><td><strong>7%</strong></td><td><span class="bdg bdg-b">Fact</span></td><td>업계 평균 성장률</td></tr>
-</tbody>
-</table>
-</div>
-<div class="card cm"><h3>목표 ARR (SOM 기준)</h3><p>국내 전장 설계 시장 1,500억 × 점유율 10% = <strong class="c-mn">연간 목표 매출 150억 원</strong></p></div>
-<span class="ph" style="margin-top:8px">SOM(1,500억) → SAM(8,700억) → TAM(5.7조) — 각 시장에서 10%·10%·2% 점유가 핵심 목표</span>
-</div>
-</div>
+    <div class="divl" style="margin-bottom:7px">① 현재 경쟁자 — 인력 중심 디자인 하우스 대비 PCBeaver 우위</div>
+    <div class="g4" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px">
+      <div class="card cb"><h3>설계 시간</h3><div class="stat c-bl" style="font-size:1.6rem">90%</div><p class="sl">더 빠른 리드타임</p></div>
+      <div class="card cm"><h3>설계 비용</h3><div class="stat c-mn" style="font-size:1.6rem">60%</div><p class="sl">외주 대비 절감</p></div>
+      <div class="card ca"><h3>품질 편차</h3><div class="stat-s c-am">Zero</div><p class="sl">인적 역량 의존 제거</p></div>
+      <div class="card cp"><h3>ECO 대응</h3><div class="stat-s c-pu">즉시</div><p class="sl">재입력만으로 재산출</p></div>
+    </div>
 
-<!-- 08 REVENUE MODEL -->
-<div class="slide" id="s8">
-<div class="aln" style="background:linear-gradient(90deg,var(--mint),var(--amber))"></div>
-<div class="sh"><span class="sn">08 / 11</span><span class="st">Revenue Model</span><span class="sr">우리의 수익모델은 무엇인가?</span></div>
-<div class="sb">
-<div class="hook">"기존 비용의 정확히 40% — 고객의 압도적 원가 절감을 수익으로 직결시키는 <span class="c-mn">투트랙(Two-track) 과금 모델</span>"</div>
-<div class="divl" style="margin-bottom:7px">투트랙 과금 구조</div>
-<div class="g2" style="margin-bottom:10px">
-<div class="card cb" style="display:flex;flex-direction:column;gap:4px">
-<div style="display:flex;align-items:center;gap:7px"><span class="bdg bdg-b">Track 1</span><h3 style="font-size:.72rem;color:var(--text)">기업형 연간 구독</h3></div>
-<div class="stat c-bl" style="font-size:1.5rem">3.2억<span style="font-size:.85rem;font-weight:700">/년</span></div>
-<p style="font-size:.75rem;line-height:1.5;color:rgba(240,244,255,.82)">타깃: 전장품 설계 기업·대형 디자인 하우스<br/>고객 연간 외주비 8억의 40% 수준.<br/>도입 즉시 연간 <strong class="c-mn">4.8억 원</strong> 직접 원가 절감.</p>
-<div style="font-size:.7rem;color:var(--muted);padding-top:4px;border-top:1px solid var(--line)">안정적 ARR 캐시카우 · 연간 갱신</div>
-</div>
-<div class="card cm" style="display:flex;flex-direction:column;gap:4px">
-<div style="display:flex;align-items:center;gap:7px"><span class="bdg bdg-m">Track 2</span><h3 style="font-size:.72rem;color:var(--text)">온디맨드 건별 과금</h3></div>
-<div class="stat c-mn" style="font-size:1.5rem">60만<span style="font-size:.85rem;font-weight:700">/건</span></div>
-<p style="font-size:.75rem;line-height:1.5;color:rgba(240,244,255,.82)">타깃: 긴급 수정 실무자·비전문가·스타트업<br/>수정 설계: 30만 원/건. 기존 외주 단가의 40%.<br/>온디맨드 → 연간 구독으로 이어지는 깔때기 구조.</p>
-<div style="font-size:.7rem;color:var(--muted);padding-top:4px;border-top:1px solid var(--line)">신규 시장 창출 + 구독 유입 깔때기</div>
-</div>
-</div>
-<div class="divl" style="margin-bottom:7px">가격 책정 원칙</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card"><h3>가치 기반 40% 룰</h3><p>고객이 절감하는 비용의 40%를 매출로. 고객 ROI가 명확해 가격 저항이 없음.</p></div>
-<div class="card"><h3>결과 기반 과금</h3><p>PCB 설계 산출물 결과에 대해 과금. 실제 결과가 나와야 비용이 발생하는 구조.</p></div>
-<div class="card cp"><h3>하드웨어 설계 대중화</h3><p>온디맨드 모델이 창출하는 롱테일 수요 → 구독 전환 가속. 새로운 TAM 개척.</p></div>
-</div>
-<div class="card cg"><h3>비전 — 하드웨어 설계의 대중화 플랫폼</h3><p>'비용과 기술 장벽 때문에 하드웨어 제작을 포기했던' 완전히 새로운 시장을 개척. 롱테일 수요가 구독 전환을 통해 ARR을 가속화하는 또 다른 거대한 수익원.</p></div>
-<span class="ph" style="margin-top:8px">기존 외주 8억 → PCBeaver 3.2억 — 도입하는 순간 고객은 60%의 비용을 번다</span>
-</div>
-</div>
+    <div class="divl" style="margin-bottom:7px">② 잠재 경쟁자 — 글로벌 AI·빅테크·EDA 기업 대비 PCBeaver 해자</div>
+    <div class="g3" style="margin-bottom:10px">
+      <div class="card">
+        <h3>sLLM 실무형 파이프라인</h3>
+        <p>sLLM이 전장 도메인 맥락을 이해해 1차 배치·배선을 빠르게 수행. 범용 AI의 도메인 무지(無知)를 극복.</p>
+      </div>
+      <div class="card">
+        <h3>OEM 양산 데이터 독점 접근</h3>
+        <p>현대차그룹·글로벌 OEM 실제 양산 사양 맞춤형 데이터셋 보유. <strong>빅테크가 돈으로 살 수 없는</strong> 살아있는 데이터.</p>
+      </div>
+      <div class="card">
+        <h3>전장 도메인 지식 결합</h3>
+        <p>10년+ 현업 전장 엔지니어의 암묵지 + AI 파이프라인. 글로벌 EDA 기업도 범용 구조의 한계로 진입 어려움.</p>
+      </div>
+    </div>
 
-<!-- 09 TRACTION -->
-<div class="slide" id="s9">
-<div class="aln" style="background:linear-gradient(90deg,var(--amber),transparent)"></div>
-<div class="sh"><span class="sn">09 / 11</span><span class="st">Traction</span><span class="sr">우리의 견인지표 성장세는 어떠한가? 향후 성장 마일스톤은 무엇인가?</span></div>
-<div class="sb">
-<div class="divl" style="margin-bottom:7px">현재 진행 상황 — MVP 완성 및 초기 검증</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card ca"><h3>MVP 상용화 완료</h3><div class="stat-s c-am">12월</div><p class="sl">sLLM → Backend Solver → Validator 3단계 파이프라인 상용 MVP 구축 완료</p></div>
-<div class="card cb"><h3>실증 비용 절감</h3><div class="stat-s c-bl">61%↓</div><p class="sl">7.75억 → 3억. 현대모비스 램프전자설계팀 2025년도 실제 외주 데이터 기반</p></div>
-<div class="card cm"><h3>도메인 노하우</h3><div class="stat-s c-mn">22년</div><p class="sl">CEO 10년 + 조연호 12년 전장 설계 실무 경험. 범용 AI 대비 압도적 도메인 우위</p></div>
-</div>
-<div class="divl" style="margin-bottom:7px">5개년 성장 로드맵</div>
-<div class="tw">
-<table>
-<thead><tr><th>연차</th><th>핵심 목표</th><th>주요 마일스톤</th></tr></thead>
-<tbody>
-<tr><td><span class="bdg bdg-b">1년차</span></td><td>AI 모델 고도화 및 양산성 검증</td><td>HMG 기술협약 기반 AI 고도화 · 현업 프로젝트 적용 · 초기 레퍼런스 확보</td></tr>
-<tr><td><span class="bdg bdg-m">2년차</span></td><td>전장품 PCB 설계 서비스 상용화</td><td>HMG 및 디자인하우스 대상 상용 서비스 · SaaS 기반 PCB 플랫폼 출시</td></tr>
-<tr><td><span class="bdg bdg-a">3년차</span></td><td>국내 시장 확대 및 방산 모델 고도화</td><td>가전·산업기기·로봇 등 일반 산업 확대 · 방산용 PCB 설계 AI 개발·검증</td></tr>
-<tr><td><span class="bdg bdg-r">4년차</span></td><td>글로벌 및 방산 시장 진출</td><td>글로벌 OEM·해외 디자인하우스 서비스 확대 · 방산용 PCB AI 상용화</td></tr>
-<tr><td><span class="bdg bdg-p">5년차</span></td><td>End-to-End AI 전자설계 플랫폼</td><td>Block Diagram → Schematic 자동 생성 · Total Electronics Design Solution · 글로벌 M/S 10%</td></tr>
-</tbody>
-</table>
-</div>
-<span class="ph" style="margin-top:9px">MVP 완성 + 실측 데이터 확보 — 상용화 단계로 즉시 전환 가능한 준비 완료 상태</span>
-</div>
-</div>
-
-<!-- 10 TEAM -->
-<div class="slide" id="s10">
-<div class="aln" style="background:linear-gradient(90deg,var(--mint),var(--blue))"></div>
-<div class="sh"><span class="sn">10 / 11</span><span class="st">Team</span><span class="sr">창업자 및 창업팀이 지니고 있는 역량은 무엇인가?</span></div>
-<div class="sb">
-<div class="hook">"고객 문제를 직접 겪은 <span class="c-mn">전장 설계 베테랑</span>이 남에게 맡기지 않고 스스로 AI 엔진을 개발하는 팀"</div>
-<div class="divl" style="margin-bottom:7px">팀 구성</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card cb" style="display:flex;flex-direction:column;gap:4px">
-<h3>이우열 — Co-founder &amp; CEO / CTO</h3>
-<div class="stat-s c-bl">10년</div>
-<p style="font-size:.73rem;line-height:1.5;color:rgba(240,244,255,.82)">현대모비스 램프전자설계팀 HW 엔지니어<br/>연세대 인공지능대학원 석사 과정 (2027.2 졸업 예정)<br/>sLLM 기반 PCB 자동화 파이프라인 직접 개발<br/>12월 상용 MVP 구축 완료</p>
-</div>
-<div class="card cm" style="display:flex;flex-direction:column;gap:4px">
-<h3>조연호 — 책임연구원 · 품질·기능안전 &amp; B2B</h3>
-<div class="stat-s c-mn">12년</div>
-<p style="font-size:.73rem;line-height:1.5;color:rgba(240,244,255,.82)">현대모비스 램프전자설계팀 전장 HW 엔지니어<br/>차량용 기능안전(Functional Safety) 공인 엔지니어<br/>협력사 전장 도면 최종 검토·승인 전담<br/>HMG 1·2차 협력사 B2B 영업·확산 총괄</p>
-</div>
-<div class="card cp" style="display:flex;flex-direction:column;gap:4px">
-<h3>노주현 — 개발 PM / CEO Staff</h3>
-<div class="stat-s c-pu" style="font-size:1.2rem">전략·PM</div>
-<p style="font-size:.73rem;line-height:1.5;color:rgba(240,244,255,.82)">현대자동차 PM(DRT 서비스 기획)<br/>비바리퍼블리카(토스) PO<br/>벤더스터 CEO (창업·연매출 6억·특허 7건)<br/>2023 대한민국 인재상(교육부장관상)</p>
-</div>
-</div>
-<div class="divl" style="margin-bottom:7px">불공정 우위 (Unfair Advantage)</div>
-<div class="g4" style="margin-bottom:9px">
-<div class="card ca"><h3>22년 현업 경험</h3><p style="font-size:.72rem">CEO 10년 + 조연호 12년. 외부에서 학습 불가능한 도메인 지식.</p></div>
-<div class="card cb"><h3>양산 데이터 접근</h3><p style="font-size:.72rem">HMG 양산 데이터·협력사 생태계 접근권. 즉시 B2B 채널 연결.</p></div>
-<div class="card cm"><h3>파이프라인 구현력</h3><p style="font-size:.72rem">sLLM + 도메인 백엔드 + Validator 직접 개발. MVP 완성으로 실행력 입증.</p></div>
-<div class="card cp"><h3>기능안전 × AI</h3><p style="font-size:.72rem">단순 자동화를 넘어 양산 즉시 투입형 무결점 설계 보장.</p></div>
-</div>
-<div class="g2">
-<div class="card"><h3>어드바이저 &amp; 멘토링</h3><p><strong>이영운 교수</strong> (연세대 AI 전문 랩) — AI 기술 자문<br/><strong>제로원 컴퍼니빌더</strong> — 창업·법인 운영 경험 보강</p></div>
-<div class="card cm"><h3>조직 확장 계획</h3><p>12월 MVP 상용화 이후 <strong>AI 엔지니어·전담 세일즈 리더</strong> 채용으로 조직 확장 예정.</p></div>
-</div>
-<span class="ph" style="margin-top:8px">모기업 데이터 접근권 + 전장 도메인 당사자 경험 = 타 팀이 가질 수 없는 차별화</span>
-</div>
-</div>
-
-<!-- 11 FINANCIAL PROJECTION -->
-<div class="slide" id="s11">
-<div class="aln" style="background:linear-gradient(90deg,var(--amber),var(--mint))"></div>
-<div class="sh"><span class="sn">11 / 11</span><span class="st">Financial Projection</span><span class="sr">향후 3개년 동안 우리의 매출/이익은 얼마나 되는가?</span></div>
-<div class="sb">
-<div class="hook">"확실한 캡티브 마켓 검증과 On-demand + SaaS 투트랙 확장을 통한 <span class="c-am">압도적 수익성 개선</span>"</div>
-<div class="divl" style="margin-bottom:7px">3개년 Financial Projection</div>
-<div class="g3" style="margin-bottom:9px">
-<div class="card cb" style="text-align:center">
-<h3>1년차 · 기술 검증</h3><div class="stat c-bl" style="font-size:1.7rem">12억</div>
-<div style="font-size:.66rem;color:var(--muted);margin-top:2px">On-demand 서비스 진입</div>
-<div style="margin-top:7px;font-size:.73rem;line-height:1.5">운영비 16억<br/>영업이익 <strong class="c-ro">-4억 (-33%)</strong></div>
-<p style="font-size:.68rem;color:rgba(240,244,255,.58);margin-top:5px;line-height:1.42">현대모비스 외주 프로젝트 25% 전환. Zero-Friction 외주 대체 방식으로 도입.</p>
-</div>
-<div class="card cm" style="text-align:center">
-<h3>2년차 · 그룹 확산</h3><div class="stat c-mn" style="font-size:1.7rem">96억</div>
-<div style="font-size:.66rem;color:var(--muted);margin-top:2px">On-demand + SaaS 병행</div>
-<div style="margin-top:7px;font-size:.73rem;line-height:1.5">운영비 62억<br/>영업이익 <strong class="c-mn">+34억 (35%)</strong></div>
-<p style="font-size:.68rem;color:rgba(240,244,255,.58);margin-top:5px;line-height:1.42">HMG 계열사 확대 적용. 그룹 내 주요 PCB 시장 50% 확보 목표.</p>
-</div>
-<div class="card ca" style="text-align:center">
-<h3>3년차 · 국내 시장 확대</h3><div class="stat c-am" style="font-size:1.7rem">200억</div>
-<div style="font-size:.66rem;color:var(--muted);margin-top:2px">전 산업군 동시 확대</div>
-<div style="margin-top:7px;font-size:.73rem;line-height:1.5">운영비 110억<br/>영업이익 <strong class="c-am">+90억 (45%)</strong></div>
-<p style="font-size:.68rem;color:rgba(240,244,255,.58);margin-top:5px;line-height:1.42">전장 M/S 10%(150억) + 인접 산업 50억. 스케일업 완성.</p>
-</div>
-</div>
-<div class="divl" style="margin-bottom:7px">수익성 전망 — 규모의 경제(Economies of Scale) 실현</div>
-<div class="g2" style="margin-bottom:9px">
-<div class="card cr"><h3>1년차 전략적 적자 — -4억</h3><p>단순 손실이 아니라 완벽한 AI 엔진을 빚어내기 위한 <strong>전략적 R&amp;D 투자 비용</strong>. On-demand로 12억 매출을 확보하며 검증 동시 진행.</p></div>
-<div class="card cg"><h3>J커브 — 영업이익률 수직 상승</h3><p>AI 모델은 고도화 후 추가 원가 상승 없이 매출 성장. <strong class="c-gd">-33% → 35% → 45%</strong> 소프트웨어 특유의 강력한 규모의 경제 실현.</p></div>
-</div>
-<div class="tw">
-<table>
-<thead><tr><th>지표</th><th>목표값</th><th>비고</th></tr></thead>
-<tbody>
-<tr><td>Gross Margin</td><td><strong class="c-mn">60%+</strong></td><td>AI 인프라 원가 제외 기준</td></tr>
-<tr><td>BEP 시점</td><td><strong class="c-mn">2년차</strong></td><td>영업이익 흑자 전환</td></tr>
-<tr><td>LTV / CAC 비율</td><td><strong>3x 이상</strong></td><td>SaaS 업계 건전성 기준</td></tr>
-</tbody>
-</table>
-</div>
-<span class="ph" style="margin-top:8px">하드웨어 전문성 + AI 소프트웨어 = 영업이익률 45%의 파괴적 J커브</span>
-</div>
+    <div class="divl" style="margin-bottom:7px">경쟁 구도 요약</div>
+    <div class="tw fl">
+      <table>
+        <thead><tr><th>경쟁군</th><th>현재 강점</th><th>구조적 한계</th><th>PCBeaver 우위</th></tr></thead>
+        <tbody>
+          <tr><td><strong style="color:#f5c066">디자인 하우스</strong></td><td>익숙한 외주 방식, 즉시 투입 가능</td><td>인력 중심 품질 편차·높은 비용·CAPA 병목</td><td>90% 빠름, 60% 저렴, 인적 리스크 제거</td></tr>
+          <tr><td><strong style="color:#ff8a9e">글로벌 AI/EDA</strong></td><td>자본력·범용 설계 도구·브랜드</td><td>전장 도메인 특화 룰·양산 데이터 부족</td><td>sLLM 파이프라인 + OEM 양산 데이터 + 전장 도메인</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <span class="ph" style="margin-top:10px">모기업 양산 데이터 접근권 + 전장 도메인 지식 = 빅테크도 돈으로 살 수 없는 비대칭 전력</span>
+  </div>
 </div>
 
 </div></div>
 
 <div id="hud">
-<button id="prev">&#8249;</button>
-<span id="sc">1 / 12</span>
-<div class="drow" id="dots"></div>
-<button id="next">&#8250;</button>
+  <button id="prev" title="이전 (←)">&#8249;</button>
+  <span id="sc">1 / 7</span>
+  <div class="drow" id="dots"></div>
+  <button id="next" title="다음 (→)">&#8250;</button>
 </div>
 
 <script>
@@ -519,13 +477,35 @@ const sc=document.getElementById('sc');
 const dotsEl=document.getElementById('dots');
 const N=slides.length;
 let cur=0;
-for(let i=0;i<N;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=(n=>()=>go(n))(i);dotsEl.appendChild(d);}
-function go(n){slides[cur].classList.remove('active');dotsEl.children[cur].classList.remove('on');cur=(n+N)%N;slides[cur].classList.add('active');dotsEl.children[cur].classList.add('on');sc.textContent=(cur+1)+' / '+N;}
-document.getElementById('prev').onclick=()=>go(cur-1);
-document.getElementById('next').onclick=()=>go(cur+1);
-document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(cur+1);if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);});
-function scale(){const sw=document.getElementById('sw');const deck=document.getElementById('deck');const s=Math.min(sw.clientWidth/1280,sw.clientHeight/720);deck.style.transform='scale('+s+')';deck.style.transformOrigin='center center';}
-scale();window.addEventListener('resize',scale);
+for(let i=0;i<N;i++){
+  const d=document.createElement('div');
+  d.className='dot'+(i===0?' on':'');
+  d.onclick=(function(n){return function(){go(n)}})(i);
+  dotsEl.appendChild(d);
+}
+function go(n){
+  slides[cur].classList.remove('active');
+  dotsEl.children[cur].classList.remove('on');
+  cur=(n+N)%N;
+  slides[cur].classList.add('active');
+  dotsEl.children[cur].classList.add('on');
+  sc.textContent=(cur+1)+' / '+N;
+}
+document.getElementById('prev').onclick=function(){go(cur-1)};
+document.getElementById('next').onclick=function(){go(cur+1)};
+document.addEventListener('keydown',function(e){
+  if(e.key==='ArrowRight'||e.key==='ArrowDown'||e.key===' ')go(cur+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp')go(cur-1);
+});
+function scale(){
+  var sw=document.getElementById('sw');
+  var deck=document.getElementById('deck');
+  var s=Math.min(sw.clientWidth/1280,sw.clientHeight/720);
+  deck.style.transform='scale('+s+')';
+  deck.style.transformOrigin='center center';
+}
+scale();
+window.addEventListener('resize',scale);
 </script>
 </body>
 </html>
