@@ -219,40 +219,60 @@ tr:last-child td{border-bottom:none}
   </div>
   <div class="sb">
     <div class="ttl">해결할 문제</div>
-    <p class="sub">설계 변경이 생길 때마다 엔지니어는 처음부터 다시 시작한다</p>
+    <p class="sub" style="margin-bottom:14px">PCB 설계 자동화는 왜 아직도 해결되지 않았는가 — 구조적 공백이 남아 있다</p>
+
+    <!-- Row 1: EDA 한계 + 두 선택지 -->
     <div class="g2" style="margin-bottom:11px">
-      <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="card cr">
-          <h3>① ECO 재설계 지옥</h3>
-          <p>기구 외곽선 변경이나 고객사 요구사항이 바뀔 때마다 처음부터 라우팅 재설계. 핵심 인력 시간이 단순 수작업에 소모됩니다.</p>
-        </div>
-        <div class="card cr">
-          <h3>② 끝없는 수정-검증 루프</h3>
-          <p>설계 완료 후에도 DRC/DFM 체크·디자인 리뷰에서 오류가 발견되면 재설계 늪으로 되돌아갑니다.</p>
-        </div>
+      <div class="card cr">
+        <h3>기존 EDA 툴의 한계</h3>
+        <p style="margin-bottom:8px">PCB 설계는 <strong>물리 특성 · 고객사별 디자인룰 · 산업 규격</strong>을 동시에 만족해야 하는 고난도 작업이어서 자동화가 어려웠다.</p>
+        <ul class="ul" style="font-size:.82rem">
+          <li>범용 설계 환경 구조상 <strong>고객사별 룰과 양산 제약을 개별 반영하기 어려움</strong></li>
+          <li>레거시 아키텍처 위에서 <strong>AI 기반 자동 완성 기능 구현·확장에 제약</strong></li>
+          <li>생산성 향상엔 기여하지만, 자동 완성 수준의 완전한 자동화엔 미도달</li>
+        </ul>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px">
-        <div class="card ca">
-          <h3>③ 외주 CAPA 병목</h3>
-          <p>디자인 하우스에 의뢰해도 CAPA 초과 시 긴급 프로젝트가 무기한 대기. 양산 일정 지연이 프로젝트 전체 리스크로 번집니다.</p>
+        <div class="card" style="background:rgba(240,64,96,.06);border-color:rgba(240,64,96,.22)">
+          <h3>선택지 A — 직접 설계</h3>
+          <ul class="ul" style="font-size:.82rem">
+            <li>숙련 PCB 엔지니어 양성에 <strong>수년</strong> 소요 — 공급 자체가 제한적</li>
+            <li>인력을 늘려도 <strong>설계 케파 확보가 구조적으로 어려움</strong></li>
+            <li>ECO 발생 시 평균 <strong style="color:var(--rose)">+10주</strong> 추가 지연 반복</li>
+          </ul>
         </div>
-        <div class="card ca">
-          <h3>④ 높은 비용 & 휴먼 에러</h3>
-          <p>건당 1,000만 원+ 외주 단가. 수작업 반복은 필연적 에러를 동반하고, 재작업 누적이 납기·품질을 동시에 붕괴시킵니다.</p>
+        <div class="card" style="background:rgba(245,166,35,.06);border-color:rgba(245,166,35,.22)">
+          <h3>선택지 B — 외주 설계</h3>
+          <ul class="ul" style="font-size:.82rem">
+            <li>높은 비용 + 재검증 부담 — 인하우스 케파 부족 시 <strong>대체 수단 없음</strong></li>
+            <li>설계 히스토리를 아는 업체 교체 시 <strong>러닝커브·재검증 비용 재발생</strong></li>
+            <li><strong>특정 업체 의존 고착</strong> — 협상력 저하, 납기 통제 불가</li>
+          </ul>
         </div>
       </div>
     </div>
+
+    <!-- Row 2: 결과 + 시장 공백 -->
     <div class="g2">
-      <div class="card">
-        <h3>페르소나 A — In-house 엔지니어</h3>
-        <p>전장품 설계 기업 내부 설계자. 타임 투 마켓 엄수 + Zero-Defect 1-Pass 설계가 핵심 KPI. 야근과 스트레스의 당사자.</p>
+      <div class="card" style="background:rgba(240,64,96,.07);border-color:rgba(240,64,96,.28);display:flex;align-items:center;gap:16px">
+        <div style="flex-shrink:0;text-align:center">
+          <div class="stat" style="font-size:2.8rem;color:var(--rose)">+10주</div>
+          <div class="sl" style="font-size:.76rem">ECO 발생 시<br/>평균 추가 지연</div>
+        </div>
+        <p style="font-size:.86rem;line-height:1.65;margin:0">이 구조적 지연이 반복되면서 <strong>R&D 생산성이 구조적으로 악화</strong>된다. 시간·비용·품질 중 어느 하나도 동시에 개선되지 않는다.</p>
       </div>
-      <div class="card">
-        <h3>페르소나 B — PCB 디자인 하우스</h3>
-        <p>CAPA = 수익성. 속도·정확도·재작업 비율이 사업성과 직결. 외주 병목과 휴먼 에러가 곧 매출 손실.</p>
+      <div class="card cm">
+        <h3 style="color:var(--mint)">시장 공백 — 아직 아무도 채우지 못한 영역</h3>
+        <p style="margin-bottom:8px">두 선택지 어디에도 없는 것:</p>
+        <ul class="ul" style="font-size:.82rem">
+          <li><strong>시간 · 비용 · 품질</strong>을 동시에 개선할 수 있는</li>
+          <li>고객사별 설계룰과 양산 제약이 <strong>내재화된</strong></li>
+          <li>즉시 양산 적용 가능한 수준의 <strong>자동화 솔루션</strong></li>
+        </ul>
+        <p style="font-size:.82rem;margin-top:8px;color:rgba(0,200,150,.9);font-weight:700">→ 이 공백이 PCBeaver의 시장 기회입니다.</p>
       </div>
     </div>
-    <div class="ph">"Problem" — 한 명의 엔지니어가 외곽 수정→재라우팅→DR 피드백→재검증을 무한 반복하는 장면으로 스토리텔링하세요.</div>
+    <div class="ph">"Problem" — EDA 툴 한계 → 두 선택지의 구조적 실패 → ECO 10주 지연 → 시장 공백으로 이어지는 인과 흐름으로 전개하세요.</div>
   </div>
 </div>
 
