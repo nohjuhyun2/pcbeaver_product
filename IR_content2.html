@@ -74,9 +74,13 @@ tr:last-child td{border-bottom:none}
 .ph{display:inline-flex;align-items:center;gap:6px;padding:6px 13px;border-radius:999px;background:rgba(29,111,232,.1);border:1px solid rgba(29,111,232,.22);font-size:.74rem;font-weight:700;color:rgba(100,160,255,.9)}
 .ph::before{content:'💡';font-size:.63rem}
 .fl{flex:1!important;min-height:0}
-.fl.g2,.fl.g3{align-content:stretch}
+.fl.g2,.fl.g3,.fl.g4{align-content:stretch}
 .fl.tw{display:flex;flex-direction:column}
 .fl.tw table{flex:1}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.hook-g{padding:13px 18px;border-left:3px solid var(--gold);background:rgba(232,200,74,.07);border-radius:0 10px 10px 0;font-size:1.04rem;font-weight:700;line-height:1.44;color:#fff;margin-bottom:13px}
+td.c-mn{color:var(--mint)!important}
+td.c-ro{color:var(--rose)!important}
 /* COVER */
 #s0{background:linear-gradient(140deg,#040c1c,#081422,#0a1830)!important}
 #s0::before{background:radial-gradient(ellipse 55% 50% at 80% 20%,rgba(29,111,232,.22),transparent),radial-gradient(ellipse 38% 38% at 10% 80%,rgba(0,200,150,.12),transparent)!important;mask-image:none!important}
@@ -310,53 +314,63 @@ tr:last-child td{border-bottom:none}
   </div>
 </div>
 
-<!-- ══ 04 현대차그룹 기업가치 제고 ══ -->
+<!-- ══ 04 STRATEGIC VALUE ══ -->
 <div class="slide" id="s4">
   <div class="aln" style="background:linear-gradient(90deg,var(--gold),transparent)"></div>
   <div class="sh">
     <span class="sn">04 / 11</span><span class="st">Strategic Value</span>
-    <span class="sr">PCBeaver는 현대차그룹 전체의 기업가치에 어떤 전략적 가치를 제공하는가?</span>
+    <span class="sr">PCBeaver는 현대차그룹 기업가치에 어떤 전략적 가치를 제공하는가?</span>
   </div>
   <div class="sb">
-    <div class="ttl">현대차그룹 기업가치 제고</div>
-    <div style="padding:10px 15px;border-left:3px solid var(--gold);background:rgba(232,200,74,.07);border-radius:0 9px 9px 0;font-size:.89rem;font-weight:700;line-height:1.42;color:#fff;margin-bottom:11px">
-      설계자 개개인의 머릿속에 파편화된 노하우를 <span class="c-gd"><strong>영구적인 디지털 자산(Digital Asset)</strong></span>으로 내재화 — 인력 이탈·외주 의존에 흔들리지 않는 기술적 해자를 완성합니다.
+    <div class="hook-g">"지금까지 사람과 외주에 분산돼 있던 PCB 설계 역량을, 현대차그룹이 직접 보유하는 <span class="c-gd">설계 엔진</span>으로 전환합니다."</div>
+
+    <div class="divl" style="margin-bottom:7px">Current Pain — 그룹이 지금 얼마나 아픈가</div>
+    <div class="tw" style="margin-bottom:9px">
+      <table>
+        <thead><tr><th>항목</th><th>현재 구조적 부담</th></tr></thead>
+        <tbody>
+          <tr><td><strong>외주 비용</strong></td><td>대상 조직 기준 연간 PCB 설계 외주비 <strong class="c-ro">120억 원</strong></td></tr>
+          <tr><td><strong>개발 일정</strong></td><td>평균 설계 리드타임 30시간/건, 프로젝트당 ECO(사양 변경 지시서) 평균 10회 발생</td></tr>
+          <tr><td><strong>품질 비용</strong></td><td>전장 품질 이슈 및 재작업 발생 시 비용 부담 확대</td></tr>
+          <tr><td><strong>인력 의존</strong></td><td>핵심 설계자 이탈 시 설계 기준과 경험이 함께 유실</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <div class="divl" style="margin-bottom:8px">그룹 차원의 4대 전략 가치 (Pillars)</div>
-    <div class="g2" style="margin-bottom:10px">
-      <div class="card cb">
-        <h3>신차 출시 가속화</h3>
-        <div class="stat c-bl" style="margin-bottom:5px">90%</div>
-        <p class="sl">설계 리드타임 단축으로 신차 및 핵심 전장 부품의<br/>Time-to-Market을 직접 가속한다.</p>
+    <div class="divl" style="margin-bottom:7px">그룹 차원의 4대 기대 효과</div>
+    <div class="g4" style="margin-bottom:9px">
+      <div class="card cb" style="text-align:center">
+        <h3>개발 일정 가속</h3>
+        <div class="stat c-bl" style="text-align:center">90%</div>
+        <p class="sl" style="text-align:center">리드타임 단축<br/>30h → 3h</p>
       </div>
-      <div class="card cm">
-        <h3>R&amp;D 이익률 개선</h3>
-        <div class="stat c-mn" style="margin-bottom:5px">60%+</div>
-        <p class="sl">외주 단가 절감으로 그룹 차원의 전장<br/>R&amp;D 고정비를 직접 낮춘다.</p>
+      <div class="card cm" style="text-align:center">
+        <h3>R&amp;D 비용 절감</h3>
+        <div class="stat c-mn" style="text-align:center">72억</div>
+        <p class="sl" style="text-align:center">외주비 120억 중<br/>최대 절감</p>
       </div>
-    </div>
-    <div class="g2" style="margin-bottom:11px">
-      <div class="card cr">
-        <h3>리콜 리스크 최소화</h3>
-        <p>필드 불량 가능성을 줄인 무결점 설계 데이터로 <strong>품질 비용과 대규모 리콜 리스크</strong>를 완화한다.</p>
+      <div class="card cr" style="text-align:center">
+        <h3>품질 리스크 완화</h3>
+        <div class="stat-s c-ro" style="text-align:center">1-Pass</div>
+        <p class="sl" style="text-align:center">재작업·필드 불량<br/>위험 완화</p>
       </div>
-      <div class="card cg">
-        <h3>설계 노하우 디지털 자산화</h3>
-        <p>암묵지를 엔진에 내재화해 <strong>인력 이탈·외주 의존에 흔들리지 않는</strong> 영구적 내부 기술 해자를 확보한다.</p>
+      <div class="card cg" style="text-align:center">
+        <h3>설계 자산 내재화</h3>
+        <div class="stat-s c-gd" style="text-align:center">영구</div>
+        <p class="sl" style="text-align:center">암묵지 → 그룹<br/>디지털 자산</p>
       </div>
     </div>
 
-    <div class="divl" style="margin-bottom:8px">왜 지금 이 투자가 필요한가</div>
-    <div class="g2 fl">
-      <div class="card">
-        <h3>단기 효과 (즉각적)</h3>
-        <p>R&amp;D 비용 절감 + 설계 일정 단축 → 타임 투 마켓 경쟁 우위 확보. 비용 절감 효과는 첫 해부터 가시적으로 발생.</p>
-      </div>
-      <div class="card cg">
-        <h3>장기 자산 (영구적)</h3>
-        <p>그룹 고유의 양산 설계 지식을 AI 엔진으로 완전히 내재화 → 외부 AI·경쟁사가 복제 불가능한 영구적 기술 해자.</p>
-      </div>
+    <div class="divl" style="margin-bottom:7px">왜 외부 구매가 아닌 내재화인가</div>
+    <div class="tw fl">
+      <table>
+        <thead><tr><th>항목</th><th>외부 솔루션 구매</th><th>PCBeaver 내재화</th></tr></thead>
+        <tbody>
+          <tr><td>현대차 설계 룰 반영</td><td>범용 기준 중심 — 맞춤 적용 불가</td><td class="c-mn">그룹·글로벌 OEM 기준 Hard Constraint 내재화</td></tr>
+          <tr><td>데이터 통제</td><td>외부 벤더 의존, 내부 데이터 유출 위험</td><td class="c-mn">내부 데이터 완전 통제 및 지속 학습</td></tr>
+          <tr><td>비용 구조</td><td>라이선스 비용 지속 발생</td><td class="c-mn">일회 투자 후 내부 자산으로 영구 축적</td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
